@@ -5,6 +5,7 @@ import time
 import traceback
 import sys
 
+
 class PrintLines(LineReader):
     def __init__(self):
         super().__init__()
@@ -53,8 +54,19 @@ class Connection(object):
             self.readerThread.close()
             del self.readerThread, self.ser, self.protocol
 
+    def send_command(self, command):
+        self.protocol.write_line(format_sp_command(command))
 
-def GetServicePortsList():
+
+def format_sp_command(cmd):
+    return cmd
+
+
+def calculate_check_digit(cmd):
+    return cmd
+
+
+def get_service_ports_list():
     current_interface = ''
     current_sp_name = ''
     isFoundSP = False
@@ -92,11 +104,12 @@ def GetServicePortsList():
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    SP = GetServicePortsList()
+    SP = get_service_ports_list()
     if not SP["isFoundSP"]:
         print('Warning: Could not find any Datalogic\'s "ServicePort"')
     else:
         print('Interface: {}, PortName: {}'.format(SP["current_interface"], SP["current_sp_name"]))
         sp_port = Connection(port=SP["current_sp_name"])
         sp_port.open_port()
+        sp_port.send_command('\x81\x00\x00\x00\x03\x00\x1C\x60')
         sp_port.close_port()
