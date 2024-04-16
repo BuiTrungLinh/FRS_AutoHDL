@@ -1,3 +1,5 @@
+import base64
+import codecs
 from serial.threaded import LineReader, ReaderThread
 import serial
 import serial.tools.list_ports as Port_list
@@ -57,13 +59,46 @@ class Connection(object):
     def send_command(self, command):
         self.protocol.write_line(format_sp_command(command))
 
+    def en_dis_test_command(self):
+        for i in range(20):
+            if i & 1:
+                self.protocol.write_line(format_sp_command('001C'))
+            else:
+                self.protocol.write_line(format_sp_command('001C'))
+            time.sleep(0.5)
+
 
 def format_sp_command(cmd):
-    return cmd
+    output_str = ""
+    if (len(cmd) % 2) == 0:
+        command_len = int(len(cmd) / 2)
 
+        hex_len = "{:08x}".format(command_len + 1)
+        output_array = ["81"]
+        for x in range(4):
+            output_array.append(hex_len[(x * 2): (x * 2 + 2)])
 
-def calculate_check_digit(cmd):
-    return cmd
+        for x in range(command_len):
+            output_array.append(cmd[:2])
+            cmd = cmd[2:]
+
+        decimal_array = []
+        sum = 0
+        for x in range(len(output_array)):
+            an_integer = int(output_array[x], 16)
+            decimal_array.append(an_integer)
+            sum += an_integer
+
+        check_digit = 256 - (sum % 256)
+        decimal_array.append(check_digit)
+
+        for d in decimal_array:
+            output_str += chr(d)
+        return output_str
+    else:
+        print("Invalid command")
+
+    return output_str
 
 
 def get_service_ports_list():
@@ -111,5 +146,5 @@ if __name__ == '__main__':
         print('Interface: {}, PortName: {}'.format(SP["current_interface"], SP["current_sp_name"]))
         sp_port = Connection(port=SP["current_sp_name"])
         sp_port.open_port()
-        sp_port.send_command('\x81\x00\x00\x00\x03\x00\x1C\x60')
+        sp_port.en_dis_test_command()
         sp_port.close_port()
