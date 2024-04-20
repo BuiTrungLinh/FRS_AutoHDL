@@ -69,13 +69,13 @@ def format_sp_command(cmd, data_type):
             cmd = cmd[2:]
 
         decimal_array = []
-        sum = 0
+        sumint = 0
         for x in range(len(output_array)):
             an_integer = int(output_array[x], 16)
             decimal_array.append(an_integer)
-            sum += an_integer
+            sumint += an_integer
 
-        check_digit = 256 - (sum % 256)
+        check_digit = 256 - (sumint % 256)
         decimal_array.append(check_digit)
 
         for d in decimal_array:
@@ -102,11 +102,11 @@ def get_service_ports_list():
                 current_interface = 'RS232'
                 break
             # 16390 = 4006 (DEC to HEX)
-            elif port.pid == int('4006', 16) and port.location is None:
+            elif port.pid == int('4006', 16) and 'x.0' in port.location:
                 current_interface = 'USBCOM'
                 break
             # 16395 = 400B (DEC to HEX)
-            elif port.pid == int('400B', 16) and port.location is None:
+            elif port.pid == int('400B', 16) and 'x.0' in port.location:
                 current_interface = 'USBCOM-SC'
                 break
             # CE: 1605, AP: 1517, FR: 1515 and 1516

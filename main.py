@@ -1,4 +1,3 @@
-import time
 
 import connection as con
 
@@ -10,5 +9,10 @@ if __name__ == '__main__':
         print('Interface: {}, PortName: {}'.format(SP["current_interface"], SP["current_sp_name"]))
         sp_port = con.Connection(port=SP["current_sp_name"])
         sp_port.open_port()
-        print(sp_port.send_command('011B'))
+        print(sp_port.send_command('011C'))
+        # idenStr = sp_port.send_command('011C').decode('utf-8', errors='ignore')
+        # idenList = idenStr.replace('\\x03', '').split('\\x02')
+        # for i in idenList:
+        #     if i.startswith('A'):
+        #         print(i)
         sp_port.close_port()

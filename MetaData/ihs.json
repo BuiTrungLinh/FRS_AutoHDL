@@ -1,0 +1,43 @@
+{
+	"Fresco": {
+		"identification": {
+			"interface": "I",
+			"eclevel": "R",
+			"applicationbuild": "A"
+		},
+		"health": { 
+			"handheld": "h",
+			"ipe1": "i1",
+			"ipe2": "i2"
+		},
+		"statistics": {
+			"statistics1": "st1",
+			"statistics2": "st2",
+			"statistics3": "st3"
+		}
+	},
+	"Curie": {
+		"identification": {
+			"interface": "I",
+			"eclevel": "R",
+			"applicationbuild": "A",
+			"CCCC": "C",
+			"serial": "S",
+			"MMMM": "M",
+			"mmmm": "m",
+			"ttttt": "t",
+			"VL": "V",
+			"format": "F"
+		},
+		"health": { 
+			"handheld": "h",
+			"ipe1": "i1",
+			"ipe2": "i2"
+		},
+		"statistics": {
+			"statistics1": "st1",
+			"statistics2": "st2",
+			"statistics3": "st3"
+		}
+	}  
+}
