@@ -1,3 +1,5 @@
+import time
+
 from serial.threaded import LineReader, ReaderThread
 import serial
 import serial.tools.list_ports as Port_list
@@ -42,6 +44,7 @@ class Connection(object):
         self.readerThread = ReaderThread(self.ser, PrintLines)
         self.readerThread.start()
         transport, self.protocol = self.readerThread.connect()
+        time.sleep(5)
         self.ser.readall()
 
     def close_port(self):
@@ -102,11 +105,11 @@ def get_service_ports_list():
                 current_interface = 'RS232'
                 break
             # 16390 = 4006 (DEC to HEX)
-            elif port.pid == int('4006', 16) and 'x.0' in port.location:
+            elif port.pid == int('4006', 16):
                 current_interface = 'USBCOM'
                 break
             # 16395 = 400B (DEC to HEX)
-            elif port.pid == int('400B', 16) and 'x.0' in port.location:
+            elif port.pid == int('400B', 16):
                 current_interface = 'USBCOM-SC'
                 break
             # CE: 1605, AP: 1517, FR: 1515 and 1516
