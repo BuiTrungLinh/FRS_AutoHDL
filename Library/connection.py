@@ -37,7 +37,7 @@ class Packetizer(Protocol):
     The class also keeps track of the transport.
     """
 
-    TERMINATOR = b'\0'
+    TERMINATOR = b''
 
     def __init__(self):
         self.buffer = bytearray()
@@ -278,16 +278,9 @@ class Connection(object):
         self.protocol = None
 
     def send_command(self, command):
-        self.protocol.write_line(command, '81')
+        data = self.protocol.write_line(command, '81')
         time.sleep(2)
-        aaa = self.ser.readlines()
-        bbb = self.ser.readall()
-        ccc = self.ser.read()
-        ddd = self.ser.readline()
-        eee = self.ser.readable()
-        rrr = self.ser.read_all()
-        fff = self.ser.read_until()
-        return aaa
+        return data
 
     def open_port(self):
         self.ser = serial.serial_for_url(url=self.port, baudrate=self.baudrate, parity=self.parity, timeout=1)
