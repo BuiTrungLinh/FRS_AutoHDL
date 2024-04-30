@@ -14,7 +14,7 @@ class UpdateType:
 
 class RS232STD:
     # 115200 none 8 1
-    interface_type = '0005'
+    interface_type = '05'
     baudrate = '08'
     parity = '00'
     databits = '01'
@@ -23,7 +23,7 @@ class RS232STD:
 
 class RS232WN:
     # 115200 odd 8 1
-    interface_type = '0012'
+    interface_type = '12'
     baudrate = '08'
     parity = '02'
     databits = '01'
@@ -32,7 +32,7 @@ class RS232WN:
 
 class RS232SC:
     # 115200 odd 7 1
-    interface_type = '0020'
+    interface_type = '20'
     baudrate = '08'
     parity = '02'
     databits = '00'
@@ -40,18 +40,19 @@ class RS232SC:
 
 
 class USBCOM:
-    interface_type = '0047'
+    interface_type = '47'
 
 
 class USBCOMSC:
-    interface_type = '001E'
+    interface_type = '1E'
 
 
 class USBOEM:
-    interface_type = '0045'
+    interface_type = '45'
 
 
 class Dlrmus:
+    # i_ = interface, p_ = param, v_ is value
     i_RS232_STD = "RS232Scanner"
     i_RS232_WN = "RS232Scanner"
     i_RS232_SC = "SCRS232Scanner"
@@ -64,7 +65,7 @@ class Dlrmus:
     p_custom_log_filename = "-l"
     p_select_comport = "-c"
     p_start_baudrate = "-b"
-
+    v_baudrate_115200 = '115200'
 
 class SPCommand:
     get_identification = "011C"
@@ -87,6 +88,8 @@ class SPCommand:
     set_databits = "009B"
     #   00=one, 01=two
     set_stopbits = "0022"
+    write = "0010"
+    read = "0011"
 
 
 class Identification:

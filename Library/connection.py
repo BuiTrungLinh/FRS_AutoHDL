@@ -7,6 +7,8 @@ import sys
 import traceback
 import time
 
+from Library.service_port import format_sp_command
+
 
 class Protocol(object):
     """\
@@ -292,49 +294,16 @@ class Connection(object):
         self.readerThread.close()
 
 
-def format_sp_command(cmd, data_type):
-    output_str = ""
-    if (len(cmd) % 2) == 0:
-        command_len = int(len(cmd) / 2)
-
-        hex_len = "{:08x}".format(command_len + 1)
-        output_array = [data_type]
-        for x in range(4):
-            output_array.append(hex_len[(x * 2): (x * 2 + 2)])
-
-        for x in range(command_len):
-            output_array.append(cmd[:2])
-            cmd = cmd[2:]
-
-        decimal_array = []
-        sumint = 0
-        for x in range(len(output_array)):
-            an_integer = int(output_array[x], 16)
-            decimal_array.append(an_integer)
-            sumint += an_integer
-
-        check_digit = 256 - (sumint % 256)
-        decimal_array.append(check_digit)
-
-        for d in decimal_array:
-            output_str += chr(d)
-
-        return output_str
-    else:
-        print("Invalid command")
-
-    return output_str
-
-
-def get_service_ports_list():
+def get_ports_list():
+    current_host_name = ''
     current_interface = ''
     current_sp_name = ''
     isFoundSP = False
     for port in Port_list.comports():
         # print('hwid: {}, desc: {}, name: {}'.format(port.hwid, port.description, port.name))
-        current_sp_name = port.name
         # 1529 = 05F9 (DEC to HEX)
         if port.vid == int('05F9', 16):
+            current_sp_name = port.name
             isFoundSP = True
             # 16384 = 4000 (DEC to HEX)
             if port.pid == int('4000', 16):
@@ -343,7 +312,8 @@ def get_service_ports_list():
             # 16390 = 4006 (DEC to HEX)
             elif port.pid == int('4006', 16):
                 current_interface = 'USBCOM'
-                break
+                if current_host_name == '':
+                    current_host_name = port.name
             # 16395 = 400B (DEC to HEX)
             elif port.pid == int('400B', 16):
                 current_interface = 'USBCOM-SC'
@@ -352,10 +322,10 @@ def get_service_ports_list():
             elif port.pid in list[int('1605', 16), int('1515', 16), int('1516', 16), int('1517', 16)]:
                 current_interface = 'USBOEM'
                 break
-
     dictPort = {
         "current_interface": current_interface,
         "current_sp_name": current_sp_name,
+        "current_host_name": current_host_name,
         "isFoundSP": isFoundSP,
     }
 
