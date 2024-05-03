@@ -13,7 +13,7 @@ class Dlrmus():
         self.from_build = from_build
         self.to_build = to_build
         self.interface = interface
-        self.host_port_name = host_port_name
+        self.host_port_name = host_port_name[3:]
         self.path_file_dlrmus = r'Tools\DLRMUs\dlrmus.exe'
         match interface:
             case comdata.Interface.rs232std:

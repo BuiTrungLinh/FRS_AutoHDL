@@ -79,7 +79,7 @@ class SPCommand:
     get_event_log_entry_enhanced = "012C"
     get_event_log_entry_enhanced_translated = "022C"
     get_hwid = "024008"
-    set_interface = "7FFB"
+    set_interface = "0001"
     # 	00=None, 01=Even, 02=Odd
     set_parity = "001F"
     #   01=9600, 08=115200

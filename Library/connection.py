@@ -303,8 +303,9 @@ def get_ports_list():
         # print('hwid: {}, desc: {}, name: {}'.format(port.hwid, port.description, port.name))
         # 1529 = 05F9 (DEC to HEX)
         if port.vid == int('05F9', 16):
-            current_sp_name = port.name
-            isFoundSP = True
+            if isFoundSP is False:
+                current_sp_name = port.name
+                isFoundSP = True
             # 16384 = 4000 (DEC to HEX)
             if port.pid == int('4000', 16):
                 current_interface = 'RS232'
@@ -312,8 +313,7 @@ def get_ports_list():
             # 16390 = 4006 (DEC to HEX)
             elif port.pid == int('4006', 16):
                 current_interface = 'USBCOM'
-                if current_host_name == '':
-                    current_host_name = port.name
+                current_host_name = port.name
             # 16395 = 400B (DEC to HEX)
             elif port.pid == int('400B', 16):
                 current_interface = 'USBCOM-SC'

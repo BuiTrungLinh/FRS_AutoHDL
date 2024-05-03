@@ -3,6 +3,7 @@ import time
 
 
 def format_sp_command(cmd, data_type):
+    print('Set command: ' + cmd)
     output_str = ""
     if (len(cmd) % 2) == 0:
         command_len = int(len(cmd) / 2)
