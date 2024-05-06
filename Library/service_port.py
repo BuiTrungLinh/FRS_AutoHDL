@@ -74,7 +74,7 @@ def set_interface(sp, interface):
     sp.send_command(comdata.SPCommand.write + comdata.SPCommand.set_parity + parity)
     sp.send_command(comdata.SPCommand.save)
     sp.send_command(comdata.SPCommand.reset)
-    time.sleep(5)
+    time.sleep(10)
 
 
 def get_scanner_current_information(data, info):

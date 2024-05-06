@@ -51,7 +51,6 @@ if __name__ == '__main__':
     }
 
     for interface in dict_selected_release:
-        file_format = ''
         if interface == 'LAST_BUILD':
             continue
         file_format = '.DAT' if interface == comdata.Interface.usboem else '.S37'
@@ -59,18 +58,19 @@ if __name__ == '__main__':
         for file_type in dict_selected_release[interface]:
             for update_type in dict_selected_release[interface][file_type]:
                 for build in dict_selected_release[interface][file_type][update_type]:
-                    path_file = path_file_root + '\\' + build + '\\' + file_type + '_' + build + file_format
+                    path_file = path_file_root + '\\' + build + '\\' + file_type + '_' + build
                     path_file_latest = path_file_root + '\\' + dict_selected_release[
-                        'LAST_BUILD'] + '\\' + file_type + '_' + dict_selected_release['LAST_BUILD'] + file_format
+                        'LAST_BUILD'] + '\\' + file_type + '_' + dict_selected_release['LAST_BUILD']
                     # run cur to cur
                     build_from = path_file_latest
                     build_to = path_file_latest
                     if update_type == comdata.UpdateType.upgrade:
                         build_from = path_file
-                        build_to = path_file_latest
                     elif update_type == comdata.UpdateType.downgrade:
-                        build_from = path_file_latest
                         build_to = path_file
+
+                    build_from = build_from + '.S37'
+                    build_to = build_to + file_format
 
                     if os.path.isfile(build_from) and os.path.isfile(build_to):
                         print('=================================')
