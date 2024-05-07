@@ -76,7 +76,6 @@ def set_interface(sp, interface):
     sp.send_command(comdata.SPCommand.reset)
     time.sleep(10)
 
-
 def get_scanner_current_information(data, info):
     iden_str = data
     iden_str = str(

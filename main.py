@@ -3,23 +3,18 @@ import time
 from Library import dlrmus
 import os.path
 from Library import connection as con
-from Library.service_port import get_scanner_current_information, set_interface
+from Library.service_port import get_scanner_current_information
 from MetaData import common_data as comdata
 
 sp = None
 
 if __name__ == '__main__':
-    list_comport = con.get_ports_list()
-    if not list_comport["isFoundSP"]:
-        print('Warning: Could not find any Datalogic\'s "ServicePort"')
-        sys.exit()
-
-    print('Interface: {}, PortName: {}'.format(list_comport["current_interface"], list_comport["current_sp_name"]))
-    sp = con.Connection(port=list_comport["current_sp_name"])
-    sp.open_port()
+    connect_port = con.connect_port()
+    sp = connect_port[0]
+    dictPort = connect_port[1]
     # issue - recheck again, cannot catch data
-    # idenStr = str(sp.send_command('011C'))
-    current_build = get_scanner_current_information('', comdata.Identification.Application_ROM_ID)
+    idenStr = str(sp.send_command('011C'))
+    current_build = get_scanner_current_information(idenStr, comdata.Identification.Application_ROM_ID)
     # current_hwid = sp.send_command(comdata.SPCommand.get_hwid)
     current_hwid = '900'
     # load GUI menu for 900 product
@@ -76,12 +71,12 @@ if __name__ == '__main__':
                         print('=================================')
                         print('Start testcase AAA')
                         dlr = dlrmus.Dlrmus(sp, from_build=build_from, to_build=build_to,
-                                            interface=interface, host_port_name=list_comport['current_host_name'])
+                                            interface=interface, host_port_name=dictPort['current_host_name'])
                         dlr.execute()
                         # class method verify data
                         print('End testcase AAA')
                         print('=================================')
                     else:
                         print('Cannot run testcase xxx because did not found file: ' + build_from
-                              + 'or file: ' + build_to)
+                              + ' or file: ' + build_to)
     sp.close_port()

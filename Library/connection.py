@@ -6,8 +6,7 @@ import serial.tools.list_ports as Port_list
 import sys
 import traceback
 import time
-
-from Library.service_port import format_sp_command
+import Library.service_port as Service_Port
 
 
 class Protocol(object):
@@ -138,7 +137,7 @@ class LineReader(Packetizer):
         is applied before sending and also the newline is append.
         """
         # + is not the best choice but bytes does not support % or .format in py3 and we want a single write call
-        self.transport.write(format_sp_command(text, datatype).encode())
+        self.transport.write(Service_Port.format_sp_command(text, datatype).encode())
 
 
 class ReaderThread(threading.Thread):
@@ -319,7 +318,7 @@ def get_ports_list():
                 current_interface = 'USBCOM-SC'
                 break
             # CE: 1605, AP: 1517, FR: 1515 and 1516
-            elif port.pid in list[int('1605', 16), int('1515', 16), int('1516', 16), int('1517', 16)]:
+            elif port.pid in [int('1605', 16), int('1515', 16), int('1516', 16), int('1517', 16)]:
                 current_interface = 'USBOEM'
                 break
     dictPort = {
@@ -330,3 +329,20 @@ def get_ports_list():
     }
 
     return dictPort
+
+
+def connect_port():
+    list_comport = get_ports_list()
+    if not list_comport["isFoundSP"]:
+        print('Warning: Could not find any Datalogic\'s "ServicePort"')
+        sys.exit()
+
+    # Show host port name if IF = USBCOM, USBCOMSC
+    show_infor = 'Interface: {}, SP_PortName: {}'.format(list_comport["current_interface"],
+                                                         list_comport["current_sp_name"])
+    if list_comport["current_interface"] in ['USBCOM', 'USBCOM-SC']:
+        show_infor = show_infor + ', Host_PortName: {}'.format(list_comport["current_host_name"])
+    print(show_infor)
+    sp = Connection(port=list_comport["current_sp_name"])
+    sp.open_port()
+    return sp, list_comport
