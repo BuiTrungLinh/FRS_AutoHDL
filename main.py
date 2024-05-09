@@ -13,8 +13,7 @@ if __name__ == '__main__':
     sp = connect_port[0]
     dictPort = connect_port[1]
     # issue - recheck again, cannot catch data
-    idenStr = str(sp.send_command('011C'))
-    current_build = get_scanner_current_information(idenStr, comdata.Identification.Application_ROM_ID)
+    current_build = get_scanner_current_information(sp, comdata.Identification.Application_ROM_ID)
     # current_hwid = sp.send_command(comdata.SPCommand.get_hwid)
     current_hwid = '900'
     # load GUI menu for 900 product

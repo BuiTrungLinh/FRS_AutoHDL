@@ -164,6 +164,7 @@ class ReaderThread(threading.Thread):
         self._lock = threading.Lock()
         self._connection_made = threading.Event()
         self.protocol = None
+        self.respond_data = b''
 
     def stop(self):
         """Stop the reader thread"""
@@ -200,8 +201,9 @@ class ReaderThread(threading.Thread):
                     # make a separated try-except for called user code
                     try:
                         self.protocol.data_received(data)
-                        print(data)
-                        print(self.protocol.data_received(data))
+                        # print(data)
+                        # print(self.protocol.data_received(data))
+                        self.respond_data = self.respond_data + data
                     except Exception as e:
                         error = e
                         break
@@ -281,7 +283,7 @@ class Connection(object):
     def send_command(self, command):
         data = self.protocol.write_line(command, '81')
         time.sleep(2)
-        return data
+        return self.readerThread.respond_data
 
     def open_port(self):
         self.ser = serial.serial_for_url(url=self.port, baudrate=self.baudrate, parity=self.parity, timeout=1)

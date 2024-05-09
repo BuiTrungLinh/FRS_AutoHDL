@@ -76,11 +76,13 @@ def set_interface(sp, interface):
     sp.send_command(comdata.SPCommand.reset)
     time.sleep(10)
 
-def get_scanner_current_information(data, info):
-    iden_str = data
-    iden_str = str(
-        r'\x02ADR9401648\x03\x02R0024\x03\x02CDEFAULT\x03\x02SCE_DEV01_900i\x03\x02MNONE\x03\x02mNONE\x03\x02I05\x03\x02B0000\x03\x02t3.10\x03\x02V2.3.7.16\x03\x02F01.05\x03\x04')
-    iden_list = iden_str.replace('\\x03', '').split('\\x02')
-    for data in iden_list:
+
+def get_scanner_current_information(sp, info):
+    idenStr = str(sp.send_command(comdata.SPCommand.get_identification))
+    healthStr = ''
+    statisticsStr = ''
+    tmp_combine = idenStr + healthStr + statisticsStr
+    infor_list = tmp_combine.replace('\\x03', '').split('\\x02')
+    for data in infor_list:
         if data.startswith(info):
             return data[1:]
