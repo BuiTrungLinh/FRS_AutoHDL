@@ -281,9 +281,10 @@ class Connection(object):
         self.protocol = None
 
     def send_command(self, command):
-        data = self.protocol.write_line(command, '81')
+        self.readerThread.respond_data = b''
+        self.protocol.write_line(command, '81')
         time.sleep(2)
-        return self.readerThread.respond_data
+        return process_return_extended_data(self.readerThread.respond_data)
 
     def open_port(self):
         self.ser = serial.serial_for_url(url=self.port, baudrate=self.baudrate, parity=self.parity, timeout=1)
@@ -348,3 +349,10 @@ def connect_port():
     sp = Connection(port=list_comport["current_sp_name"])
     sp.open_port()
     return sp, list_comport
+
+
+def process_return_extended_data(data):
+    # \x82 = 130
+    if data[1] == 130:
+        return data[6:-1]
+    return data

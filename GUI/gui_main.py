@@ -2,7 +2,16 @@ import tkinter as tk
 from tkinter import messagebox
 
 class MainGUI:
-    def __init__(self):
+    def __init__(self, product):
+        self.product = product
+        if product == b'\t\x00':
+            print('Curie')
+        elif product == b'':
+            print('Apollo')
+
+        self.path_release = ''
+        self.dict_selected_release = {}
+
         self.root = tk.Tk()
         self.root.title('AutoHDL')
 
@@ -31,6 +40,30 @@ class MainGUI:
                 print(self.textbox.get('1.0', tk.END))
             else:
                 messagebox.showinfo(title='Message', message=self.textbox.get('1.0', tk.END))
+                self.path_release = r'D:\tmp\CE_Release'
+                self.dict_selected_release = {
+                    #   4= usbcom
+                    4: {
+                        "AppOnly": {
+                            1: ['DR9401638', 'DR9401643', 'DR9401646'],
+                            2: ['DR9401638', 'DR9401643', 'DR9401646'],
+                        },
+                        "AppCfg": {
+                            1: ['DR9401638', 'DR9401643', 'DR9401646'],
+                        }
+                    },
+                    #   6 = usboem
+                    6: {
+                        "AppOnly": {
+                            1: ['DR9401638', 'DR9401643', 'DR9401646'],
+                        },
+                        "AppCfg": {
+                            1: ['DR9401638', 'DR9401643', 'DR9401646'],
+                            2: ['DR9401638', 'DR9401643', 'DR9401646'],
+                        }
+                    },
+                    "LAST_BUILD": "DR9401648"
+                }
 
     def on_closing(self):
         if messagebox.askyesno(title="Quit?", message="Do you really want to quit?"):
@@ -40,4 +73,4 @@ class MainGUI:
         self.textbox.delete('1.0', tk.END)
         self.checkbox.deselect()
 
-MainGUI()
+# MainGUI()
