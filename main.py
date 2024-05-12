@@ -7,6 +7,8 @@ from Library import service_port
 from MetaData import common_data as comdata
 import GUI.gui_main as gui_main
 import Library.testcase as tcs
+from MetaData.testcase_data import FormatTcs as gen_tcs_name
+from Library import testcase as tcs
 
 sp = None
 
@@ -14,9 +16,10 @@ if __name__ == '__main__':
     connect_port = con.connect_port()
     sp = connect_port[0]
     dictPort = connect_port[1]
-    current_build = service_port.get_scanner_current_information(sp, comdata.Identification.Application_ROM_ID)
+    # current_build = service_port.get_scanner_current_information(sp, comdata.Identification.Application_ROM_ID)
     # load GUI menu for current_hwid product
-    gui = gui_main.MainGUI(sp.send_command(comdata.SPCommand.get_hwid))
+    # gui = gui_main.MainGUI(sp.send_command(comdata.SPCommand.get_hwid))
+    gui = gui_main.startup(b'\t\x00')
     # Path release build
     path_release_root = gui.path_release
     # dict selected release build
@@ -25,13 +28,16 @@ if __name__ == '__main__':
     for interface in dict_selected_release:
         if interface == 'LAST_BUILD':
             continue
-        arg_testcase = [interface]
-        file_format = '.DAT' if interface == comdata.Interface.usboem else '.S37'
+        obj_testcase = tcs.Testcase
+        arg_testcase = {gen_tcs_name.interface: interface}
+        file_format = '.DAT' if interface == comdata.Interface.usboem_index else '.S37'
         # call dlrmus
         for file_type in dict_selected_release[interface]:
-            arg_testcase.append(file_type)
+            arg_testcase[gen_tcs_name.file_type] = file_type
             for update_type in dict_selected_release[interface][file_type]:
-                arg_testcase.append('CurToCur')
+                arg_testcase[gen_tcs_name.update_type] = 'CurToCur'
+                testcase = obj_testcase(arg_testcase)
+                is_print_tcsname = False
                 for build in dict_selected_release[interface][file_type][update_type]:
                     path_file = path_release_root + '\\' + build + '\\' + file_type + '_' + build
                     path_file_latest = path_release_root + '\\' + dict_selected_release[
@@ -40,33 +46,40 @@ if __name__ == '__main__':
                     build_from = path_file_latest
                     build_to = path_file_latest
                     # arg_testcase - index = 3
-                    arg_testcase.append('Current')
+                    arg_testcase[gen_tcs_name.build_from] = 'Current'
                     # arg_testcase - index = 4
-                    arg_testcase.append('Current')
+                    arg_testcase[gen_tcs_name.build_to] = 'Current'
                     if update_type == comdata.UpdateType.upgrade:
                         build_from = path_file
-                        arg_testcase[2] = 'Upgrade'
-                        arg_testcase[3] = build
+                        # arg_testcase[2] = 'Upgrade'
+                        arg_testcase[gen_tcs_name.update_type] = 'Upgrade'
+                        # arg_testcase[3] = build
+                        arg_testcase[gen_tcs_name.build_from] = build
                     elif update_type == comdata.UpdateType.downgrade:
                         build_to = path_file
-                        arg_testcase[2] = 'Downgrade'
-                        arg_testcase[4] = build
-
+                        # arg_testcase[2] = 'Downgrade'
+                        arg_testcase[gen_tcs_name.update_type] = 'Downgrade'
+                        # arg_testcase[4] = build
+                        arg_testcase[gen_tcs_name.build_to] = build
+                    # gen testcase
+                    testcase.gen_testcase()
+                    if not is_print_tcsname:
+                        print('*** Start testcase "{}"'.format(testcase.testcase_name))
+                        is_print_tcsname = True
+                    print('---- Start scenario "{}"'.format(testcase.scenario_name))
                     build_from = build_from + '.S37'
                     build_to = build_to + file_format
-
-                    # gen testcase
-                    testcase_name = tcs.gen_testcase(arg_testcase)
                     if os.path.isfile(build_from) and os.path.isfile(build_to):
-                        print('=================================')
-                        print('Start testcase {}'.format(testcase_name))
                         # dlr = dlrmus.Dlrmus(sp, from_build=build_from, to_build=build_to,
                         #                     interface=interface, host_port_name=dictPort['current_host_name'])
                         # dlr.execute()
+                        a = ''
                         # class method verify data
-                        print('End testcase {}'.format(testcase_name))
-                        print('=================================')
                     else:
-                        print('Cannot run testcase {} because did not found file: {} or file {}'
-                              .format(testcase_name, build_from, build_to))
+                        print('Warning!!!: Cannot run testcase "{}" with scenario "{}" because did not found file: {} or file {}'
+                              .format(testcase.testcase_name, testcase.scenario_name, build_from, build_to))
+                    print('---- End scenario "{}"'.format(testcase.scenario_name))
+                print('*** End testcase "{}"'.format(testcase.testcase_name))
+                print('=================================')
+                is_print_tcsname = False
     sp.close_port()

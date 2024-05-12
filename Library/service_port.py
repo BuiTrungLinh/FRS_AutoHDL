@@ -43,29 +43,29 @@ def set_interface(sp, interface):
     stopbits = ''
     parity = ''
     sp_interface = ''
-    if interface == comdata.Interface.rs232std:
+    if interface == comdata.Interface.rs232std_index:
         sp_interface = comdata.RS232STD.interface_type
         baudrate = comdata.RS232STD.baudrate
         databits = comdata.RS232STD.databits
         stopbits = comdata.RS232STD.stopbits
         parity = comdata.RS232STD.parity
-    elif interface == comdata.Interface.rs232wn:
+    elif interface == comdata.Interface.rs232wn_index:
         sp_interface = comdata.RS232WN.interface_type
         baudrate = comdata.RS232WN.baudrate
         databits = comdata.RS232WN.databits
         stopbits = comdata.RS232WN.stopbits
         parity = comdata.RS232WN.parity
-    elif interface == comdata.Interface.rs232sc:
+    elif interface == comdata.Interface.rs232sc_index:
         sp_interface = comdata.RS232SC.interface_type
         baudrate = comdata.RS232SC.baudrate
         databits = comdata.RS232SC.databits
         stopbits = comdata.RS232SC.stopbits
         parity = comdata.RS232SC.parity
-    elif interface == comdata.Interface.usbcom:
+    elif interface == comdata.Interface.usbcom_index:
         sp_interface = comdata.USBCOM.interface_type
-    elif interface == comdata.Interface.usbcomsc:
+    elif interface == comdata.Interface.usbcomsc_index:
         sp_interface = comdata.USBCOMSC.interface_type
-    elif interface == comdata.Interface.usboem:
+    elif interface == comdata.Interface.usboem_index:
         sp_interface = comdata.USBOEM.interface_type
     sp.send_command(comdata.SPCommand.write + comdata.SPCommand.set_interface + sp_interface)
     sp.send_command(comdata.SPCommand.write + comdata.SPCommand.set_baudrate + baudrate)

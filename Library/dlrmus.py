@@ -17,17 +17,17 @@ class Dlrmus:
         self.host_port_name = host_port_name[3:]
         self.path_file_dlrmus = r'Tools\DLRMUs\dlrmus.exe'
         match interface:
-            case comdata.Interface.rs232std:
+            case comdata.Interface.rs232std_index:
                 self.dlr_interface = comdata.Dlrmus.i_RS232_STD
-            case comdata.Interface.rs232wn:
+            case comdata.Interface.rs232wn_index:
                 self.dlr_interface = comdata.Dlrmus.i_RS232_WN
-            case comdata.Interface.rs232sc:
+            case comdata.Interface.rs232sc_index:
                 self.dlr_interface = comdata.Dlrmus.i_RS232_SC
-            case comdata.Interface.usbcom:
+            case comdata.Interface.usbcom_index:
                 self.dlr_interface = comdata.Dlrmus.i_USBCOM
-            case comdata.Interface.usbcomsc:
+            case comdata.Interface.usbcomsc_index:
                 self.dlr_interface = comdata.Dlrmus.i_USBCOM_SC
-            case comdata.Interface.usboem:
+            case comdata.Interface.usboem_index:
                 self.dlr_interface = comdata.Dlrmus.i_USBOEM
             case _:
                 self.dlr_interface = comdata.Dlrmus.i_RS232_STD
@@ -39,19 +39,19 @@ class Dlrmus:
         match serviceport.get_scanner_current_information(str(self.sp.send_command('011C'))
                                                           , comdata.Identification.Scanner_Interface_Number):
             case comdata.RS232STD.interface_type:
-                current_scanner_if = comdata.Interface.rs232std
+                current_scanner_if = comdata.Interface.rs232std_index
             case comdata.RS232WN.interface_type:
-                current_scanner_if = comdata.Interface.rs232wn
+                current_scanner_if = comdata.Interface.rs232wn_index
             case comdata.RS232SC.interface_type:
-                current_scanner_if = comdata.Interface.rs232sc
+                current_scanner_if = comdata.Interface.rs232sc_index
             case comdata.USBCOM.interface_type:
-                current_scanner_if = comdata.Interface.usbcom
+                current_scanner_if = comdata.Interface.usbcom_index
             case comdata.USBCOMSC.interface_type:
-                current_scanner_if = comdata.Interface.usbcomsc
+                current_scanner_if = comdata.Interface.usbcomsc_index
             case comdata.USBOEM.interface_type:
-                current_scanner_if = comdata.Interface.usboem
+                current_scanner_if = comdata.Interface.usboem_index
             case _:
-                current_scanner_if = comdata.Interface.rs232std
+                current_scanner_if = comdata.Interface.rs232std_index
 
         print('from build: ' + self.from_build + ' to build ' + self.to_build + ' with interface ' + self.dlr_interface)
         # load from_build into scanner by ServicePort method
@@ -81,10 +81,10 @@ class Dlrmus:
         # add more -c portname if interface is USBCOM, USBCOMSC
         set_host_port_name = ''
         set_parity = ''
-        if self.interface == comdata.Interface.usbcom or self.interface == comdata.Interface.usbcomsc:
+        if self.interface == comdata.Interface.usbcom_index or self.interface == comdata.Interface.usbcomsc_index:
             set_host_port_name = '-c ' + self.host_port_name + ' '
         # add more -p parity = odd if interface is rs232WN
-        if self.interface == comdata.Interface.rs232wn:
+        if self.interface == comdata.Interface.rs232wn_index:
             set_parity = '-p o '
         cmd_dlrmus_host = (self.path_file_dlrmus + ' '
                            + comdlr.p_select_interface + ' '

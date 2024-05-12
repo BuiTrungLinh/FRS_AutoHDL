@@ -1,10 +1,19 @@
 class Interface:
-    rs232std = 1
-    rs232wn = 2
-    rs232sc = 3
-    usbcom = 4
-    usbcomsc = 5
-    usboem = 6
+    rs232std_index = 1
+    rs232std_name = 'RS232-STD'
+    rs232wn_index = 2
+    rs232wn_name = 'RS232-WN'
+    rs232sc_index = 3
+    rs232sc_name = 'RS232-SC'
+    usbcom_index = 4
+    usbcom_name = 'USB-COM'
+    usbcomsc_index = 5
+    usbcomsc_name = 'USB-COM-SC'
+    usboem_index = 6
+    usboem_name = 'USB-OEM'
+    interface_dict = {
+
+    }
 
 
 class UpdateType:
@@ -145,3 +154,12 @@ class Statistics:
     Scale_sentry_activations = "S"
     POS_initiated_zero_requests = "Z"
     Enforced_zero_events = "X"
+
+
+class Product:
+    Apollo_index = 0
+    Curie_index = 1
+    Fresco_index = 2
+    Apollo_name = 'Apollo'
+    Curie_name = 'Curie'
+    Fresco_name = 'Fresco'
