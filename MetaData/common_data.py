@@ -11,14 +11,51 @@ class Interface:
     usbcomsc_name = 'USB-COM-SC'
     usboem_index = 6
     usboem_name = 'USB-OEM'
-    interface_dict = {
-
-    }
 
 
 class UpdateType:
-    upgrade = 1
-    downgrade = 2
+    upgrade_index = 1
+    downgrade_index = 2
+    curtocur_index = 3
+    upgrade_name = 'Upgrade'
+    downgrade_name = 'Downgrade'
+    curtocur_name = 'Cur-To-Cur'
+    dict_updatetype = {
+        1: {
+            "name": "Upgrade"
+        },
+        2: {
+            "name": "Downgrade"
+        },
+        3: {
+            "name": "Cur-To-Cur"
+        }
+    }
+
+
+class FileType:
+    apponly_index = 1
+    appcfg_index = 2
+    cfgonly_index = 3
+    othercfg_index = 4
+    apponly_name = 'AppOnly'
+    appcfg_name = 'AppCfg'
+    cfgonly_name = 'CfgOnly'
+    othercfg_name = 'OtherCfg'
+    dict_filetype = {
+        1: {
+            "name": "AppOnly"
+        },
+        2: {
+            "name": "AppCfg"
+        },
+        3: {
+            "name": "CfgOnly"
+        },
+        4: {
+            "name": "OtherCfg"
+        },
+    }
 
 
 class RS232STD:
@@ -75,6 +112,7 @@ class Dlrmus:
     p_select_comport = "-c"
     p_start_baudrate = "-b"
     v_baudrate_115200 = '115200'
+
 
 class SPCommand:
     get_identification = "011C"
@@ -163,3 +201,77 @@ class Product:
     Apollo_name = 'Apollo'
     Curie_name = 'Curie'
     Fresco_name = 'Fresco'
+    Apollo_interface = {
+        1: {
+            "name": "RS232-STD",
+            "index": "1"
+        },
+        2: {
+            "name": "RS232-WN",
+            "index": "2"
+        },
+        3: {
+            "name": "RS232-SC",
+            "index": "3"
+        },
+        4: {
+            "name": "USB-COM",
+            "index": "4"
+        },
+        5: {
+            "name": "USB-COM-SC",
+            "index": "5"
+        },
+        6: {
+            "name": "USB-OEM",
+            "index": "6"
+        }
+    }
+    Curie_interface = {
+        1: {
+            "name": "RS232-STD",
+            "index": "1"
+        },
+        2: {
+            "name": "RS232-WN",
+            "index": "2"
+        },
+        3: {
+            "name": "USB-COM",
+            "index": "3"
+        },
+        4: {
+            "name": "USB-OEM",
+            "index": "4"
+        },
+        5: {
+            "name": "USB-KBD",
+            "index": "5"
+        }
+    }
+    Fresco_interface = {
+        1: {
+            "name": "RS232-STD",
+            "index": "1"
+        },
+        2: {
+            "name": "RS232-WN",
+            "index": "2"
+        },
+        3: {
+            "name": "RS232-SC",
+            "index": "3"
+        },
+        4: {
+            "name": "USB-COM",
+            "index": "4"
+        },
+        5: {
+            "name": "USB-COM-SC",
+            "index": "5"
+        },
+        6: {
+            "name": "USB-OEM",
+            "index": "6"
+        }
+    }

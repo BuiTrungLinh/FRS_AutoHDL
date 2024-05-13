@@ -19,7 +19,7 @@ if __name__ == '__main__':
     # current_build = service_port.get_scanner_current_information(sp, comdata.Identification.Application_ROM_ID)
     # load GUI menu for current_hwid product
     # gui = gui_main.MainGUI(sp.send_command(comdata.SPCommand.get_hwid))
-    gui = gui_main.startup(b'\t\x00')
+    gui = gui_main.startup()
     # Path release build
     path_release_root = gui.path_release
     # dict selected release build
@@ -49,13 +49,13 @@ if __name__ == '__main__':
                     arg_testcase[gen_tcs_name.build_from] = 'Current'
                     # arg_testcase - index = 4
                     arg_testcase[gen_tcs_name.build_to] = 'Current'
-                    if update_type == comdata.UpdateType.upgrade:
+                    if update_type == comdata.UpdateType.upgrade_index:
                         build_from = path_file
                         # arg_testcase[2] = 'Upgrade'
                         arg_testcase[gen_tcs_name.update_type] = 'Upgrade'
                         # arg_testcase[3] = build
                         arg_testcase[gen_tcs_name.build_from] = build
-                    elif update_type == comdata.UpdateType.downgrade:
+                    elif update_type == comdata.UpdateType.downgrade_index:
                         build_to = path_file
                         # arg_testcase[2] = 'Downgrade'
                         arg_testcase[gen_tcs_name.update_type] = 'Downgrade'

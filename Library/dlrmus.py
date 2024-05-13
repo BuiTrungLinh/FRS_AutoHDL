@@ -50,8 +50,6 @@ class Dlrmus:
                 current_scanner_if = comdata.Interface.usbcomsc_index
             case comdata.USBOEM.interface_type:
                 current_scanner_if = comdata.Interface.usboem_index
-            case _:
-                current_scanner_if = comdata.Interface.rs232std_index
 
         print('from build: ' + self.from_build + ' to build ' + self.to_build + ' with interface ' + self.dlr_interface)
         # load from_build into scanner by ServicePort method

@@ -17,7 +17,9 @@
 			"RC5": "DR9401643",
 			"RC6": "DR9401646",
 			"RC7": "DR9401648"
-		}
+		},
+		"Latest Build": "DR9401648",
+		"Feature Build": "DR94016xx"
 	},
 	"Curie": {
 		"Beta": {
