@@ -56,8 +56,8 @@ class MainGUI:
 
         interface_frame = tk.Frame(body_frame, width=180, height=185, bg="purple")
         interface_frame.grid(row=0, column=0)
-        self.check_boxes_ifs = {item: tk.StringVar() for item in dict_current_interface}
         # create dict of check_boxes
+        self.check_boxes_ifs = {item: tk.IntVar() for item in dict_current_interface}
         for interface in dict_current_interface:
             tmp = tk.Checkbutton(interface_frame, text=dict_current_interface[interface]["name"],
                                  variable=self.check_boxes_ifs[interface], font=('Arial', 10), onvalue=1, offvalue=0)
@@ -65,35 +65,37 @@ class MainGUI:
 
         filetype_frame = tk.Frame(body_frame, width=180, height=185, bg="purple")
         filetype_frame.grid(row=0, column=1)
+        self.check_boxes_filetype = {item: tk.IntVar() for item in comdata.FileType.dict_filetype}
         for filetype in comdata.FileType.dict_filetype:
             tmp = tk.Checkbutton(filetype_frame, text=comdata.FileType.dict_filetype[filetype]["name"],
-                                 variable=tk.IntVar(), font=('Arial', 10))
+                                 variable=self.check_boxes_filetype[filetype], font=('Arial', 10))
             tmp.pack(padx=10, pady=10)
 
         updatetype_frame = tk.Frame(body_frame, width=180, height=185, bg="purple")
         updatetype_frame.grid(row=0, column=2)
+        self.check_boxes_updatetype = {item: tk.IntVar() for item in comdata.UpdateType.dict_updatetype}
         for updatetype in comdata.UpdateType.dict_updatetype:
             tmp = tk.Checkbutton(updatetype_frame, text=comdata.UpdateType.dict_updatetype[updatetype]["name"],
-                                 variable=tk.IntVar(), font=('Arial', 10))
+                                 variable=self.check_boxes_updatetype[updatetype], font=('Arial', 10))
             tmp.pack(padx=10, pady=10)
 
-        release_frame = tk.Frame(body_frame, width=180, height=185, bg="purple")
-        release_frame.grid(row=0, column=3)
-        tmp_row = 0
-        for mr in self.current_dict_software:
-            label_mr = tk.Label(release_frame, text='--- {}'.format(mr), font=('Arial', 15))
-            label_mr.grid(row=tmp_row, column=0, pady=10)
-            if mr == 'Latest Build' or mr == 'Feature Build':
-                label_mr.config(text='{}: {}'.format(mr, self.current_dict_software[mr]))
-                label_mr.grid(columnspan=2)
-                tmp_row = tmp_row + 1
-                continue
-            for rc in self.current_dict_software[mr]:
-                tmp_row = tmp_row + 1
-                checkbox_rc = tk.Checkbutton(release_frame, text='{} {}'.format(rc, self.current_dict_software[mr][rc]),
-                                             variable=tk.IntVar(), font=('Arial', 10))
-                checkbox_rc.grid(row=tmp_row, column=1, pady=5)
-            tmp_row = tmp_row + 1
+        # release_frame = tk.Frame(body_frame, width=180, height=185, bg="purple")
+        # release_frame.grid(row=0, column=3)
+        # tmp_row = 0
+        # for mr in self.current_dict_software:
+        #     label_mr = tk.Label(release_frame, text='--- {}'.format(mr), font=('Arial', 15))
+        #     label_mr.grid(row=tmp_row, column=0, pady=10)
+        #     if mr == 'Latest Build' or mr == 'Feature Build':
+        #         label_mr.config(text='{}: {}'.format(mr, self.current_dict_software[mr]))
+        #         label_mr.grid(columnspan=2)
+        #         tmp_row = tmp_row + 1
+        #         continue
+        #     for rc in self.current_dict_software[mr]:
+        #         tmp_row = tmp_row + 1
+        #         checkbox_rc = tk.Checkbutton(release_frame, text='{} {}'.format(rc, self.current_dict_software[mr][rc]),
+        #                                      variable=tk.IntVar(), font=('Arial', 10))
+        #         checkbox_rc.grid(row=tmp_row, column=1, pady=5)
+        #     tmp_row = tmp_row + 1
 
         located_frame = tk.Frame(self.root)
         located_frame.grid(row=2, column=0, padx=10, pady=5)
@@ -103,9 +105,18 @@ class MainGUI:
         self.textbox_located.grid(row=1, column=2, padx=5, pady=5)
 
         def show_msg():
+            self.dict_selected_release = {}
+            filetype = {}
+            updatetype = {}
             for item in self.check_boxes_ifs:
-                print(item)
-            a = ''
+                if self.check_boxes_ifs[item].get() == 1:
+                    for item_filetype in self.check_boxes_filetype:
+                        if self.check_boxes_filetype[item_filetype].get() == 1:
+                            for item_updatetype in self.check_boxes_updatetype:
+                                if self.check_boxes_filetype[item_updatetype].get() == 1:
+                                    updatetype[item_updatetype] = [1,2,3,4]
+                            filetype[item_filetype] = updatetype
+                    self.dict_selected_release[item] = filetype
             # path_release = self.textbox_located.get("1.0", tk.END)
             # if not path_release.strip():
             #     messagebox.showinfo(title='Error-Message', message='Please enter file path!!!')

@@ -33,15 +33,16 @@ if __name__ == '__main__':
         file_format = '.DAT' if interface == comdata.Interface.usboem_index else '.S37'
         # call dlrmus
         for file_type in dict_selected_release[interface]:
-            arg_testcase[gen_tcs_name.file_type] = file_type
+            file_type_name = comdata.FileType.dict_filetype[file_type]['name']
+            arg_testcase[gen_tcs_name.file_type] = file_type_name
             for update_type in dict_selected_release[interface][file_type]:
                 arg_testcase[gen_tcs_name.update_type] = 'CurToCur'
                 testcase = obj_testcase(arg_testcase)
                 is_print_tcsname = False
                 for build in dict_selected_release[interface][file_type][update_type]:
-                    path_file = path_release_root + '\\' + build + '\\' + file_type + '_' + build
+                    path_file = path_release_root + '\\' + build + '\\' + file_type_name + '_' + build
                     path_file_latest = path_release_root + '\\' + dict_selected_release[
-                        'LAST_BUILD'] + '\\' + file_type + '_' + dict_selected_release['LAST_BUILD']
+                        'LAST_BUILD'] + '\\' + file_type_name + '_' + dict_selected_release['LAST_BUILD']
                     # run cur to cur
                     build_from = path_file_latest
                     build_to = path_file_latest
@@ -76,7 +77,8 @@ if __name__ == '__main__':
                         a = ''
                         # class method verify data
                     else:
-                        print('Warning!!!: Cannot run testcase "{}" with scenario "{}" because did not found file: {} or file {}'
+                        print('Warning!!!: Cannot run testcase "{}" with scenario "{}" because did not found file: {} '
+                              'or file {}'
                               .format(testcase.testcase_name, testcase.scenario_name, build_from, build_to))
                     print('---- End scenario "{}"'.format(testcase.scenario_name))
                 print('*** End testcase "{}"'.format(testcase.testcase_name))
