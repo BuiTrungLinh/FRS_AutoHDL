@@ -8,11 +8,11 @@ import json
 
 class MainGUI:
     def __init__(self):
-        with open('../MetaData/software_release.json') as json_file:
+        with open('MetaData/software_release.json') as json_file:
             dict_software = json.load(json_file)
         self.product = ''
         self.dict_software = dict_software
-        self.current_dict_software = {}
+        self.current_dict_release = {}
         self.path_release = ''
         self.dict_selected_release = {}
 
@@ -45,13 +45,13 @@ class MainGUI:
         dict_current_interface = None
         match self.combo_select_product.current():
             case comdata.Product.Apollo_index:
-                self.current_dict_software = dict_software[comdata.Product.Apollo_name]
+                self.current_dict_release = dict_software[comdata.Product.Apollo_name]
                 dict_current_interface = comdata.Product.Apollo_interface
             case comdata.Product.Curie_index:
-                self.current_dict_software = dict_software[comdata.Product.Curie_name]
+                self.current_dict_release = dict_software[comdata.Product.Curie_name]
                 dict_current_interface = comdata.Product.Curie_interface
             case comdata.Product.Fresco_index:
-                self.current_dict_software = dict_software[comdata.Product.Fresco_name]
+                self.current_dict_release = dict_software[comdata.Product.Fresco_name]
                 dict_current_interface = comdata.Product.Fresco_interface
 
         interface_frame = tk.Frame(body_frame, width=180, height=185, bg="purple")
@@ -79,23 +79,25 @@ class MainGUI:
                                  variable=self.check_boxes_updatetype[updatetype], font=('Arial', 10))
             tmp.pack(padx=10, pady=10)
 
-        # release_frame = tk.Frame(body_frame, width=180, height=185, bg="purple")
-        # release_frame.grid(row=0, column=3)
-        # tmp_row = 0
-        # for mr in self.current_dict_software:
-        #     label_mr = tk.Label(release_frame, text='--- {}'.format(mr), font=('Arial', 15))
-        #     label_mr.grid(row=tmp_row, column=0, pady=10)
-        #     if mr == 'Latest Build' or mr == 'Feature Build':
-        #         label_mr.config(text='{}: {}'.format(mr, self.current_dict_software[mr]))
-        #         label_mr.grid(columnspan=2)
-        #         tmp_row = tmp_row + 1
-        #         continue
-        #     for rc in self.current_dict_software[mr]:
-        #         tmp_row = tmp_row + 1
-        #         checkbox_rc = tk.Checkbutton(release_frame, text='{} {}'.format(rc, self.current_dict_software[mr][rc]),
-        #                                      variable=tk.IntVar(), font=('Arial', 10))
-        #         checkbox_rc.grid(row=tmp_row, column=1, pady=5)
-        #     tmp_row = tmp_row + 1
+        release_frame = tk.Frame(body_frame, width=180, height=185, bg="purple")
+        release_frame.grid(row=0, column=3)
+        tmp_row = 0
+        self.check_boxes_release = {}
+        for mr in self.current_dict_release:
+            label_mr = tk.Label(release_frame, text='--- {}'.format(mr), font=('Arial', 15))
+            label_mr.grid(row=tmp_row, column=0, pady=10)
+            if mr == 'Latest Build' or mr == 'Feature Build':
+                label_mr.config(text='{}: {}'.format(mr, self.current_dict_release[mr]))
+                label_mr.grid(columnspan=2)
+                tmp_row = tmp_row + 1
+                continue
+            self.check_boxes_release[mr] = {item: tk.IntVar() for item in self.current_dict_release[mr]}
+            for rc in self.current_dict_release[mr]:
+                tmp_row = tmp_row + 1
+                checkbox_rc = tk.Checkbutton(release_frame, text='{} {}'.format(rc, self.current_dict_release[mr][rc]),
+                                             variable=self.check_boxes_release[mr][rc], font=('Arial', 10))
+                checkbox_rc.grid(row=tmp_row, column=1, pady=5)
+            tmp_row = tmp_row + 1
 
         located_frame = tk.Frame(self.root)
         located_frame.grid(row=2, column=0, padx=10, pady=5)
@@ -108,16 +110,24 @@ class MainGUI:
             self.dict_selected_release = {}
             filetype = {}
             updatetype = {}
+            release = []
             for item in self.check_boxes_ifs:
                 if self.check_boxes_ifs[item].get() == 1:
                     for item_filetype in self.check_boxes_filetype:
                         if self.check_boxes_filetype[item_filetype].get() == 1:
                             for item_updatetype in self.check_boxes_updatetype:
-                                if self.check_boxes_filetype[item_updatetype].get() == 1:
-                                    updatetype[item_updatetype] = [1,2,3,4]
+                                if self.check_boxes_updatetype[item_updatetype].get() == 1:
+                                    release.clear()
+                                    for item_release_mr in self.current_dict_release:
+                                        if item_release_mr not in ['Latest Build', 'Feature Build']:
+                                            for item_release_rc in self.current_dict_release[item_release_mr]:
+                                                if self.check_boxes_release[item_release_mr][item_release_rc].get() == 1:
+                                                    release.append(
+                                                        self.current_dict_release[item_release_mr][item_release_rc])
+                                            updatetype[item_updatetype] = release
                             filetype[item_filetype] = updatetype
                     self.dict_selected_release[item] = filetype
-            # path_release = self.textbox_located.get("1.0", tk.END)
+            path_release = self.textbox_located.get("1.0", tk.END)
             # if not path_release.strip():
             #     messagebox.showinfo(title='Error-Message', message='Please enter file path!!!')
             # else:
@@ -153,7 +163,6 @@ class MainGUI:
             #         "LAST_BUILD": "DR9401648"
             #     }
 
-
         footer_frame = tk.Frame(self.root, width=300, height=200)
         footer_frame.grid(row=3, column=0, padx=10, pady=5)
         self.button_execute = tk.Button(footer_frame, text='Execute!', font=('Arial', 18), command=show_msg)
@@ -168,8 +177,6 @@ class MainGUI:
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
         # show GUI
         self.root.mainloop()
-
-
 
     def on_closing(self):
         if messagebox.askyesno(title="Quit?", message="Do you really want to quit?"):
