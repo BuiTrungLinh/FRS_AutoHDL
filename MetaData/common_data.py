@@ -193,6 +193,13 @@ class Statistics:
     POS_initiated_zero_requests = "Z"
     Enforced_zero_events = "X"
 
+class Message:
+    Error_Title = 'Error-Message'
+    Error_No_Selected_IFs = 'Please select at least 1 interface!'
+    Error_No_Selected_FileType = 'Please select at least 1 file-type!'
+    Error_No_Selected_UpdateType = 'Please select at least 1 update-type!'
+    Error_No_Selected_Release = 'Please select at least 1 release!'
+    Error_No_Located_Path = 'Please enter the path containing release!'
 
 class Product:
     Apollo_index = 0

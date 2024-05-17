@@ -3,17 +3,17 @@ from tkinter import messagebox, ttk
 from webbrowser import get
 
 from MetaData import common_data as comdata
+from MetaData.common_data import Message as msg
 import json
 
 
 class MainGUI:
     def __init__(self):
-        with open('MetaData/software_release.json') as json_file:
-            dict_software = json.load(json_file)
+        with open('../MetaData/software_release.json') as json_file:
+            self.dict_release = json.load(json_file)
         self.product = ''
-        self.dict_software = dict_software
-        self.current_dict_release = {}
         self.path_release = ''
+        self.dict_current_release = {}
         self.dict_selected_release = {}
 
         # Start layout
@@ -45,13 +45,13 @@ class MainGUI:
         dict_current_interface = None
         match self.combo_select_product.current():
             case comdata.Product.Apollo_index:
-                self.current_dict_release = dict_software[comdata.Product.Apollo_name]
+                self.dict_current_release = self.dict_release[comdata.Product.Apollo_name]
                 dict_current_interface = comdata.Product.Apollo_interface
             case comdata.Product.Curie_index:
-                self.current_dict_release = dict_software[comdata.Product.Curie_name]
+                self.dict_current_release = self.dict_release[comdata.Product.Curie_name]
                 dict_current_interface = comdata.Product.Curie_interface
             case comdata.Product.Fresco_index:
-                self.current_dict_release = dict_software[comdata.Product.Fresco_name]
+                self.dict_current_release = self.dict_release[comdata.Product.Fresco_name]
                 dict_current_interface = comdata.Product.Fresco_interface
 
         interface_frame = tk.Frame(body_frame, width=180, height=185, bg="purple")
@@ -83,18 +83,18 @@ class MainGUI:
         release_frame.grid(row=0, column=3)
         tmp_row = 0
         self.check_boxes_release = {}
-        for mr in self.current_dict_release:
+        for mr in self.dict_current_release:
             label_mr = tk.Label(release_frame, text='--- {}'.format(mr), font=('Arial', 15))
             label_mr.grid(row=tmp_row, column=0, pady=10)
             if mr == 'Latest Build' or mr == 'Feature Build':
-                label_mr.config(text='{}: {}'.format(mr, self.current_dict_release[mr]))
+                label_mr.config(text='{}: {}'.format(mr, self.dict_current_release[mr]))
                 label_mr.grid(columnspan=2)
                 tmp_row = tmp_row + 1
                 continue
-            self.check_boxes_release[mr] = {item: tk.IntVar() for item in self.current_dict_release[mr]}
-            for rc in self.current_dict_release[mr]:
+            self.check_boxes_release[mr] = {item: tk.IntVar() for item in self.dict_current_release[mr]}
+            for rc in self.dict_current_release[mr]:
                 tmp_row = tmp_row + 1
-                checkbox_rc = tk.Checkbutton(release_frame, text='{} {}'.format(rc, self.current_dict_release[mr][rc]),
+                checkbox_rc = tk.Checkbutton(release_frame, text='{} {}'.format(rc, self.dict_current_release[mr][rc]),
                                              variable=self.check_boxes_release[mr][rc], font=('Arial', 10))
                 checkbox_rc.grid(row=tmp_row, column=1, pady=5)
             tmp_row = tmp_row + 1
@@ -106,66 +106,9 @@ class MainGUI:
         self.textbox_located = tk.Text(located_frame, height=1, width=50, font=('Arial', 15))
         self.textbox_located.grid(row=1, column=2, padx=5, pady=5)
 
-        def show_msg():
-            self.dict_selected_release = {}
-            filetype = {}
-            updatetype = {}
-            release = []
-            for item in self.check_boxes_ifs:
-                if self.check_boxes_ifs[item].get() == 1:
-                    for item_filetype in self.check_boxes_filetype:
-                        if self.check_boxes_filetype[item_filetype].get() == 1:
-                            for item_updatetype in self.check_boxes_updatetype:
-                                if self.check_boxes_updatetype[item_updatetype].get() == 1:
-                                    release.clear()
-                                    for item_release_mr in self.current_dict_release:
-                                        if item_release_mr not in ['Latest Build', 'Feature Build']:
-                                            for item_release_rc in self.current_dict_release[item_release_mr]:
-                                                if self.check_boxes_release[item_release_mr][item_release_rc].get() == 1:
-                                                    release.append(
-                                                        self.current_dict_release[item_release_mr][item_release_rc])
-                                            updatetype[item_updatetype] = release
-                            filetype[item_filetype] = updatetype
-                    self.dict_selected_release[item] = filetype
-            path_release = self.textbox_located.get("1.0", tk.END)
-            # if not path_release.strip():
-            #     messagebox.showinfo(title='Error-Message', message='Please enter file path!!!')
-            # else:
-            #     # self.path_release = path_release
-            #     self.path_release = r'D:\tmp\CE_Release'
-            #     for item in self.check_boxes_ifs:
-            #         print(item)
-            # if self.check_state.get() == 0:
-            #     print(self.textbox.get('1.0', tk.END))
-            # else:
-            #     messagebox.showinfo(title='Message', message=self.textbox.get('1.0', tk.END))
-            #     self.dict_selected_release = {
-            #         #   4= usbcom
-            #         4: {
-            #             "AppOnly": {
-            #                 1: ['DR9401638', 'DR9401643', 'DR9401646'],
-            #                 2: ['DR9401638', 'DR9401643', 'DR9401646'],
-            #             },
-            #             "AppCfg": {
-            #                 1: ['DR9401638', 'DR9401643', 'DR9401646'],
-            #             }
-            #         },
-            #         #   6 = usboem
-            #         6: {
-            #             "AppOnly": {
-            #                 1: ['DR9401638', 'DR9401643', 'DR9401646'],
-            #             },
-            #             "AppCfg": {
-            #                 1: ['DR9401638', 'DR9401643', 'DR9401646'],
-            #                 2: ['DR9401638', 'DR9401643', 'DR9401646'],
-            #             }
-            #         },
-            #         "LAST_BUILD": "DR9401648"
-            #     }
-
         footer_frame = tk.Frame(self.root, width=300, height=200)
         footer_frame.grid(row=3, column=0, padx=10, pady=5)
-        self.button_execute = tk.Button(footer_frame, text='Execute!', font=('Arial', 18), command=show_msg)
+        self.button_execute = tk.Button(footer_frame, text='Execute!', font=('Arial', 18), command=self.execute_hdl)
         self.button_execute.grid(row=0, column=0, padx=10, pady=10)
         #
         self.button_refresh = tk.Button(footer_frame, text='Refresh', font=('Arial', 18), command=self.clear)
@@ -178,13 +121,71 @@ class MainGUI:
         # show GUI
         self.root.mainloop()
 
+    def execute_hdl(self):
+        self.gen_dict_release()
+
+    def gen_dict_release(self):
+        filetype = {}
+        updatetype = {}
+        release = []
+        self.path_release = self.textbox_located.get("1.0", tk.END)
+
+        # Check if checkbox does not select
+        if 1 not in ([item.get() for item in self.check_boxes_ifs.values()]):
+            messagebox.showinfo(title=msg.Error_Title, message=msg.Error_No_Selected_IFs)
+            return
+        elif 1 not in ([item.get() for item in self.check_boxes_filetype.values()]):
+            messagebox.showinfo(title=msg.Error_Title, message=msg.Error_No_Selected_FileType)
+            return
+        elif 1 not in ([item.get() for item in self.check_boxes_updatetype.values()]):
+            messagebox.showinfo(title=msg.Error_Title, message=msg.Error_No_Selected_UpdateType)
+            return
+
+        tmp_list = []
+        for tmp_item_1 in self.dict_current_release:
+            if tmp_item_1 not in ['Latest Build', 'Feature Build']:
+                for tmp_item_2 in self.dict_current_release[tmp_item_1]:
+                    tmp_list.append((self.check_boxes_release[tmp_item_1][tmp_item_2].get()))
+        if 1 not in tmp_list:
+            messagebox.showinfo(title=msg.Error_Title, message=msg.Error_No_Selected_Release)
+            return
+
+        if not self.path_release.strip():
+            messagebox.showinfo(title=msg.Error_Title, message=msg.Error_No_Located_Path)
+            return
+
+        for item in self.check_boxes_ifs:
+            if self.check_boxes_ifs[item].get() == 1:
+                for item_filetype in self.check_boxes_filetype:
+                    if self.check_boxes_filetype[item_filetype].get() == 1:
+                        for item_updatetype in self.check_boxes_updatetype:
+                            if self.check_boxes_updatetype[item_updatetype].get() == 1:
+                                release.clear()
+                                for item_release_mr in self.dict_current_release:
+                                    if item_release_mr not in ['Latest Build', 'Feature Build']:
+                                        for item_release_rc in self.dict_current_release[item_release_mr]:
+                                            if self.check_boxes_release[item_release_mr][item_release_rc].get() == 1:
+                                                release.append(
+                                                    self.dict_current_release[item_release_mr][item_release_rc])
+                                        updatetype[item_updatetype] = release
+                        filetype[item_filetype] = updatetype
+                self.dict_selected_release[item] = filetype
+
     def on_closing(self):
         if messagebox.askyesno(title="Quit?", message="Do you really want to quit?"):
             self.root.destroy()
 
     def clear(self):
-        self.textbox.delete('1.0', tk.END)
-        self.checkbox.deselect()
+        for item in self.check_boxes_ifs:
+            self.check_boxes_ifs[item].set(0)
+        for item in self.check_boxes_filetype:
+            self.check_boxes_filetype[item].set(0)
+        for item in self.check_boxes_updatetype:
+            self.check_boxes_updatetype[item].set(0)
+        for item in self.check_boxes_release:
+            for tmp_item in self.check_boxes_release[item]:
+                self.check_boxes_release[item][tmp_item].set(0)
+        self.textbox_located.delete("1.0", tk.END)
 
 
 MainGUI()
