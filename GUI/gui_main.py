@@ -1,17 +1,17 @@
 import tkinter as tk
 from tkinter import messagebox, ttk
+from tkinter import *
+from tkinter import filedialog
 from webbrowser import get
 
 from MetaData import common_data as comdata
 from MetaData.common_data import Message as msg
 import json
 
-
 class MainGUI:
     def __init__(self):
         with open('../MetaData/software_release.json') as json_file:
             self.dict_release = json.load(json_file)
-        self.product = ''
         self.path_release = ''
         self.dict_current_release = {}
         self.dict_selected_release = {}
@@ -37,73 +37,20 @@ class MainGUI:
             justify='center')
         self.combo_select_product.current(0)
         self.combo_select_product.pack(padx=10, pady=10)
+        # self.combo_select_product.trace('w', self.changed_product)
+        self.combo_select_product.bind('<<ComboboxSelected>>', self.changed_product)
 
         # Frame body contains: interface_frame, filetype_frame, updatetype_frame, release_frame
-        body_frame = tk.Frame(self.root)
-        body_frame.grid(row=1, column=0, padx=10, pady=5)
+        self.body_frame = tk.Frame(self.root)
+        self.body_frame.grid(row=1, column=0, padx=10, pady=5)
 
-        dict_current_interface = None
-        match self.combo_select_product.current():
-            case comdata.Product.Apollo_index:
-                self.dict_current_release = self.dict_release[comdata.Product.Apollo_name]
-                dict_current_interface = comdata.Product.Apollo_interface
-            case comdata.Product.Curie_index:
-                self.dict_current_release = self.dict_release[comdata.Product.Curie_name]
-                dict_current_interface = comdata.Product.Curie_interface
-            case comdata.Product.Fresco_index:
-                self.dict_current_release = self.dict_release[comdata.Product.Fresco_name]
-                dict_current_interface = comdata.Product.Fresco_interface
-
-        interface_frame = tk.Frame(body_frame, width=180, height=185, bg="purple")
-        interface_frame.grid(row=0, column=0)
-        # create dict of check_boxes
-        self.check_boxes_ifs = {item: tk.IntVar() for item in dict_current_interface}
-        for interface in dict_current_interface:
-            tmp = tk.Checkbutton(interface_frame, text=dict_current_interface[interface]["name"],
-                                 variable=self.check_boxes_ifs[interface], font=('Arial', 10), onvalue=1, offvalue=0)
-            tmp.pack(padx=10, pady=10)
-
-        filetype_frame = tk.Frame(body_frame, width=180, height=185, bg="purple")
-        filetype_frame.grid(row=0, column=1)
-        self.check_boxes_filetype = {item: tk.IntVar() for item in comdata.FileType.dict_filetype}
-        for filetype in comdata.FileType.dict_filetype:
-            tmp = tk.Checkbutton(filetype_frame, text=comdata.FileType.dict_filetype[filetype]["name"],
-                                 variable=self.check_boxes_filetype[filetype], font=('Arial', 10))
-            tmp.pack(padx=10, pady=10)
-
-        updatetype_frame = tk.Frame(body_frame, width=180, height=185, bg="purple")
-        updatetype_frame.grid(row=0, column=2)
-        self.check_boxes_updatetype = {item: tk.IntVar() for item in comdata.UpdateType.dict_updatetype}
-        for updatetype in comdata.UpdateType.dict_updatetype:
-            tmp = tk.Checkbutton(updatetype_frame, text=comdata.UpdateType.dict_updatetype[updatetype]["name"],
-                                 variable=self.check_boxes_updatetype[updatetype], font=('Arial', 10))
-            tmp.pack(padx=10, pady=10)
-
-        release_frame = tk.Frame(body_frame, width=180, height=185, bg="purple")
-        release_frame.grid(row=0, column=3)
-        tmp_row = 0
-        self.check_boxes_release = {}
-        for mr in self.dict_current_release:
-            label_mr = tk.Label(release_frame, text='--- {}'.format(mr), font=('Arial', 15))
-            label_mr.grid(row=tmp_row, column=0, pady=10)
-            if mr == 'Latest Build' or mr == 'Feature Build':
-                label_mr.config(text='{}: {}'.format(mr, self.dict_current_release[mr]))
-                label_mr.grid(columnspan=2)
-                tmp_row = tmp_row + 1
-                continue
-            self.check_boxes_release[mr] = {item: tk.IntVar() for item in self.dict_current_release[mr]}
-            for rc in self.dict_current_release[mr]:
-                tmp_row = tmp_row + 1
-                checkbox_rc = tk.Checkbutton(release_frame, text='{} {}'.format(rc, self.dict_current_release[mr][rc]),
-                                             variable=self.check_boxes_release[mr][rc], font=('Arial', 10))
-                checkbox_rc.grid(row=tmp_row, column=1, pady=5)
-            tmp_row = tmp_row + 1
+        self.load_body()
 
         located_frame = tk.Frame(self.root)
         located_frame.grid(row=2, column=0, padx=10, pady=5)
-        self.label_located = tk.Label(located_frame, text='Located Release:', font=('Arial', 10))
+        self.label_located = tk.Label(located_frame, text='Located Release:', font='Arial 10 bold')
         self.label_located.grid(row=1, column=1, padx=5, pady=5)
-        self.textbox_located = tk.Text(located_frame, height=1, width=50, font=('Arial', 15))
+        self.textbox_located = tk.Text(located_frame, height=1, width=50, font=('Arial', 10))
         self.textbox_located.grid(row=1, column=2, padx=5, pady=5)
 
         footer_frame = tk.Frame(self.root, width=300, height=200)
@@ -120,6 +67,72 @@ class MainGUI:
         self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
         # show GUI
         self.root.mainloop()
+
+    def load_body(self):
+        # clear all data in body_frame
+        for widgets in self.body_frame.winfo_children():
+            widgets.destroy()
+        # load data in combo_select_product
+        dict_current_interface = None
+        match self.combo_select_product.current():
+            case comdata.Product.Apollo_index:
+                self.dict_current_release = self.dict_release[comdata.Product.Apollo_name]
+                dict_current_interface = comdata.Product.Apollo_interface
+            case comdata.Product.Curie_index:
+                self.dict_current_release = self.dict_release[comdata.Product.Curie_name]
+                dict_current_interface = comdata.Product.Curie_interface
+            case comdata.Product.Fresco_index:
+                self.dict_current_release = self.dict_release[comdata.Product.Fresco_name]
+                dict_current_interface = comdata.Product.Fresco_interface
+
+        interface_frame = tk.LabelFrame(self.body_frame, text='Interface', font='Arial 10 bold')
+        interface_frame.grid(row=0, column=0, padx=10, sticky="NE")
+        # create dict of check_boxes
+        self.check_boxes_ifs = {item: tk.IntVar() for item in dict_current_interface}
+        for interface in dict_current_interface:
+            tmp = tk.Checkbutton(interface_frame, text=dict_current_interface[interface]["name"],
+                                 variable=self.check_boxes_ifs[interface], font=('Arial', 10), anchor='w')
+            tmp.pack(padx=10, pady=10, fill='both')
+
+        filetype_frame = tk.LabelFrame(self.body_frame, text='File-Type', font='Arial 10 bold')
+        filetype_frame.grid(row=0, column=1, padx=10, sticky="NE")
+        self.check_boxes_filetype = {item: tk.IntVar() for item in comdata.FileType.dict_filetype}
+        for filetype in comdata.FileType.dict_filetype:
+            tmp = tk.Checkbutton(filetype_frame, text=comdata.FileType.dict_filetype[filetype]["name"],
+                                 variable=self.check_boxes_filetype[filetype], font=('Arial', 10), anchor='w')
+            tmp.pack(padx=10, pady=10, fill='both')
+
+        updatetype_frame = tk.LabelFrame(self.body_frame, text='Update-Type', font='Arial 10 bold')
+        updatetype_frame.grid(row=0, column=2, padx=10, sticky="NE")
+        self.check_boxes_updatetype = {item: tk.IntVar() for item in comdata.UpdateType.dict_updatetype}
+        for updatetype in comdata.UpdateType.dict_updatetype:
+            tmp = tk.Checkbutton(updatetype_frame, text=comdata.UpdateType.dict_updatetype[updatetype]["name"],
+                                 variable=self.check_boxes_updatetype[updatetype], font=('Arial', 10), anchor='w')
+            tmp.pack(padx=10, pady=10, fill='both')
+
+        release_frame = tk.LabelFrame(self.body_frame, text='Release', font='Arial 10 bold')
+        release_frame.grid(row=0, column=3, padx=10, sticky="NE")
+        tmp_row = 0
+        self.check_boxes_release = {}
+        for mr in self.dict_current_release:
+            label_mr = tk.Label(release_frame, text='--- {}'.format(mr), font='Arial 10 bold')
+            label_mr.grid(row=tmp_row, sticky="W", padx=15)
+            if mr == 'Latest Build' or mr == 'Feature Build':
+                label_mr.config(text='{}: {}'.format(mr, self.dict_current_release[mr]))
+                label_mr.grid(columnspan=2)
+                tmp_row = tmp_row + 1
+                continue
+            self.check_boxes_release[mr] = {item: tk.IntVar() for item in self.dict_current_release[mr]}
+            for rc in self.dict_current_release[mr]:
+                tmp_row = tmp_row + 1
+                checkbox_rc = tk.Checkbutton(release_frame, text='{} {}'.format(rc, self.dict_current_release[mr][rc]),
+                                             variable=self.check_boxes_release[mr][rc], font=('Arial', 10))
+                checkbox_rc.grid(row=tmp_row, column=1, sticky="W")
+            tmp_row = tmp_row + 1
+
+    def changed_product(self, event):
+        self.load_body()
+        # messagebox.showinfo(title=msg.Error_Title, message=self.combo_select_product.get())
 
     def execute_hdl(self):
         self.gen_dict_release()
