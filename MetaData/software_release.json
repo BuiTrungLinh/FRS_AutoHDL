@@ -1,25 +1,17 @@
 {
 	"Apollo": {
 		"Beta": {
-			"RC1": "XCE-0001",
-			"RC2": "XCE-0003",
-			"RC3": "DR9401598"
+			"RC1": "DR9401604",
+			"Sprint10": "XAA-0007-BETA-1",
+			"RC2": "DR9401616-BETA-1-HW",
+			"Sprint11": "XAA-0010-BETA-1-HW",
+			"RC3": "DR9401629-BETA-1-HW",
+			"RC4": "DR9401634",
+			"RC5": "DR9401647",
+			"RC6": "DR9401653"
 		},
-		"Pilot": {
-			"Sprint 11": "XCE-0009",
-			"Sprint 12": "XCE-0010"
-		},
-		"GA": {
-			"RC1": "DR9401617",
-			"RC2": "DR9401626",
-			"RC3": "DR9401636",
-			"RC4": "DR9401638",
-			"RC5": "DR9401643",
-			"RC6": "DR9401646",
-			"RC7": "DR9401648"
-		},
-		"Latest Build": "DR9401648",
-		"Feature Build": "DR94016xx"
+		"Latest Build": "DR9401659",
+		"Feature Build": "DR9401659"
 	},
 	"Curie": {
 		"Beta": {
@@ -39,23 +31,29 @@
 			"RC5": "DR9401643",
 			"RC6": "DR9401646",
 			"RC7": "DR9401648"
-		}
+		},
+		"Latest Build": "DR9401657",
+		"Feature Build": "DR9401657"
 	},
 	"Fresco": {
-		"MR1.0": {
-			"RC1": "DR9400248",
-			"RC2": "DR9400292",
-			"RC3": "DR9400312"
+		"MR1.1": {
+			"RC1": "DR9401607",
+			"RC2": "DR9401622",
+			"RC3": "DR9401627",
+			"RC4": "DR9401630"
+		},
+		"MR1.2": {
+			"RC1": "DR9401640",
+			"RC2": "DR9401649"
 		},
 		"MR2.0": {
-			"RC1": "DR9400351",
-			"RC2": "DR9400352",
-			"RC3": "DR9400353"
+			"Sprint 71": "XFA-0041",
+			"Sprint 72": "XFA-0042",
+			"Sprint 73": "XFA-0043",
+			"Sprint 75": "XFA-0044",
+			"Sprint 79": "XFA-0051"
 		},
-		"MR3.0": {
-			"RC1": "DR9400354",
-			"RC2": "DR9400355",
-			"RC3": "DR9400356"
-		}
+		"Latest Build": "DR9401654",
+		"Feature Build": "DR9401654"
 	}
 }
