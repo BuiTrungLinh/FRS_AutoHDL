@@ -3,5 +3,5 @@
 *** Variables ***
 
 *** Keywords ***
-VerifyHDL
+Verify HDL
     [Arguments]

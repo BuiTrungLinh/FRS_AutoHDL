@@ -10,7 +10,7 @@ import json
 
 class MainGUI:
     def __init__(self):
-        with open('../MetaData/software_release.json') as json_file:
+        with open('MetaData/software_release.json') as json_file:
             self.dict_release = json.load(json_file)
         self.path_release = ''
         self.dict_current_release = {}
@@ -199,9 +199,6 @@ class MainGUI:
             for tmp_item in self.check_boxes_release[item]:
                 self.check_boxes_release[item][tmp_item].set(0)
         self.textbox_located.delete("1.0", tk.END)
-
-
-MainGUI()
 
 
 def startup():
