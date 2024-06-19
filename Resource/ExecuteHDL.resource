@@ -1,8 +1,10 @@
 *** Settings ***
-Library    Library/service_port.py
+Library    ../Library/execute.py
+
 *** Variables ***
 
 *** Keywords ***
 Execute HDL
-        [Arguments]    ${INTERFACE}    ${FILE_TYPE}    ${UPDATE_TYPE}    ${BUILD_FROM}    ${BUILD_TO}
-        set interface
+        [Arguments]    ${INTERFACE}     ${BUILD}    ${LASTBUILD}    ${FILETYPE}    ${UPDATETYPE}    ${PATHRELEASE}
+        executehdls    ${INTERFACE}     ${BUILD}    ${LASTBUILD}    ${FILETYPE}    ${UPDATETYPE}    ${PATHRELEASE}
+        log    asfafa
