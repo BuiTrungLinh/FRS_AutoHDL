@@ -6,5 +6,4 @@ Library    ../Library/execute.py
 *** Keywords ***
 Execute HDL
         [Arguments]    ${INTERFACE}     ${BUILD}    ${LASTBUILD}    ${FILETYPE}    ${UPDATETYPE}    ${PATHRELEASE}
-        executehdls    ${INTERFACE}     ${BUILD}    ${LASTBUILD}    ${FILETYPE}    ${UPDATETYPE}    ${PATHRELEASE}
-        log    asfafa
+        exe_hostdownload    ${INTERFACE}     ${BUILD}    ${LASTBUILD}    ${FILETYPE}    ${UPDATETYPE}    ${PATHRELEASE}
