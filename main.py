@@ -71,8 +71,8 @@ if __name__ == '__main__':
                     build_from = build_from + '.S37'
                     build_to = build_to + file_format
                     if os.path.isfile(build_from) and os.path.isfile(build_to):
-                        # dlr = dlrmus.Dlrmus(sp, from_build=build_from, to_build=build_to,
-                        #                     interface=interface, host_port_name=dictPort['current_host_name'])
+                        dlr = dlrmus.Dlrmus(sp, from_build=build_from, to_build=build_to,
+                                            interface=interface, host_port_name=dictPort['current_host_name'])
                         # dlr.execute()
                         a = ''
                         # class method verify data

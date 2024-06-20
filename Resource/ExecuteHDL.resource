@@ -5,5 +5,5 @@ Library    ../Library/execute.py
 
 *** Keywords ***
 Execute HDL
-        [Arguments]    ${INTERFACE}     ${BUILD}    ${LASTBUILD}    ${FILETYPE}    ${UPDATETYPE}    ${PATHRELEASE}
-        exe_hostdownload    ${INTERFACE}     ${BUILD}    ${LASTBUILD}    ${FILETYPE}    ${UPDATETYPE}    ${PATHRELEASE}
+        [Arguments]    ${INTERFACE}     ${UPDATETYPE}     ${FILETYPE}     ${BUILD}    ${LASTBUILD}    ${PATHRELEASE}
+        exe_hostdownload    ${INTERFACE}     ${UPDATETYPE}     ${FILETYPE}     ${BUILD}    ${LASTBUILD}    ${PATHRELEASE}
