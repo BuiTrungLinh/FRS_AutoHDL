@@ -15,7 +15,8 @@ class Dlrmus:
         self.to_build = to_build
         self.interface = interface
         self.host_port_name = host_port_name[3:]
-        self.path_file_dlrmus = r'Tools\DLRMUs\dlrmus.exe'
+        # self.path_file_dlrmus = r'..\Tools\DLRMUs\dlrmus.exe'
+        self.path_file_dlrmus = r'D:\1.DevelopmentTool\PycharmProjects\FRS_AutoHDL\Tools\DLRMUs\dlrmus.exe'
         match interface:
             case comdata.Interface.rs232std_index:
                 self.dlr_interface = comdata.Dlrmus.i_RS232_STD
@@ -36,8 +37,7 @@ class Dlrmus:
     def execute(self):
         # 1 = RS232STD
         current_scanner_if = 1
-        match serviceport.get_scanner_current_information(str(self.sp.send_command('011C'))
-                                                          , comdata.Identification.Scanner_Interface_Number):
+        match serviceport.get_scanner_current_information(self.sp, comdata.Identification.Scanner_Interface_Number):
             case comdata.RS232STD.interface_type:
                 current_scanner_if = comdata.Interface.rs232std_index
             case comdata.RS232WN.interface_type:
@@ -61,7 +61,8 @@ class Dlrmus:
         # close sp because drmus update by sp
         self.sp.close_port()
         print(cmd_dlrmus_sp)
-        subprocess.run(cmd_dlrmus_sp)
+        # subprocess.run(cmd_dlrmus_sp)
+        time.sleep(5)
         self.sp.open_port()
         # check build is load success
         # setting baudrate, databits, stopbits, parity for scanner, prepare before updating by host
@@ -79,17 +80,20 @@ class Dlrmus:
         # add more -c portname if interface is USBCOM, USBCOMSC
         set_host_port_name = ''
         set_parity = ''
+        set_baudrate = ''
         if self.interface == comdata.Interface.usbcom_index or self.interface == comdata.Interface.usbcomsc_index:
             set_host_port_name = '-c ' + self.host_port_name + ' '
         # add more -p parity = odd if interface is rs232WN
         if self.interface == comdata.Interface.rs232wn_index:
             set_parity = '-p o '
+        if self.interface not in [comdata.Interface.usboem_index, comdata.Interface.usbcom_index]:
+            set_baudrate = comdlr.p_start_baudrate + ' ' + comdlr.v_baudrate_115200 + ' '
         cmd_dlrmus_host = (self.path_file_dlrmus + ' '
                            + comdlr.p_select_interface + ' '
                            + self.dlr_interface + ' '
                            + set_host_port_name
                            + set_parity
-                           + comdlr.p_start_baudrate + ' ' + comdlr.v_baudrate_115200 + ' '
+                           + set_baudrate
                            + comdlr.p_select_path_file + ' '
                            + self.to_build)
         print(cmd_dlrmus_host)
