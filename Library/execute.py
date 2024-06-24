@@ -2,7 +2,6 @@ import os.path
 import sys
 sys.path.insert(0, r'..\..\FRS_AutoHDL')
 
-from robot.libraries.BuiltIn import BuiltIn
 from MetaData import common_data as comdata
 from Library import dlrmus
 from Library import connection as con
