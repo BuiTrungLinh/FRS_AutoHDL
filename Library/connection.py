@@ -7,6 +7,8 @@ import sys
 import traceback
 import time
 import Library.service_port as Service_Port
+from Library.common import print_message_to_console
+from MetaData.common_data import SPCommand as spcmd
 
 
 class Protocol(object):
@@ -306,38 +308,43 @@ def get_ports_list():
         # 1529 = 05F9 (DEC to HEX)
         if port.vid == int('05F9', 16):
             if isFoundSP is False:
-                current_sp_name = port.name
-                isFoundSP = True
+                # sending ihs to scanner, make sure selected port is SP
+                con = Connection(port=port.name)
+                try:
+                    con.open_port()
+                    con.send_command(command=spcmd.get_identification)
+                    current_sp_name = port.name
+                    isFoundSP = True
+                    con.close_port()
+                except:
+                    con.close_port()
+                    current_host_name = port.name
+
             # 16384 = 4000 (DEC to HEX)
             if port.pid == int('4000', 16):
                 current_interface = 'RS232'
-                break
             # 16390 = 4006 (DEC to HEX)
             elif port.pid == int('4006', 16):
                 current_interface = 'USBCOM'
-                current_host_name = port.name
             # 16395 = 400B (DEC to HEX)
             elif port.pid == int('400B', 16):
                 current_interface = 'USBCOM-SC'
-                break
             # CE: 1605, AP: 1517, FR: 1515 and 1516
             elif port.pid in [int('1605', 16), int('1515', 16), int('1516', 16), int('1517', 16)]:
                 current_interface = 'USBOEM'
-                break
     dictPort = {
         "current_interface": current_interface,
         "current_sp_name": current_sp_name,
         "current_host_name": current_host_name,
         "isFoundSP": isFoundSP,
     }
-
     return dictPort
 
 
 def connect_port():
     list_comport = get_ports_list()
     if not list_comport["isFoundSP"]:
-        print('Warning: Could not find any Datalogic\'s "ServicePort"')
+        print_message_to_console('Warning: Could not find any Datalogic\'s "ServicePort"')
         sys.exit()
 
     # Show host port name if IF = USBCOM, USBCOMSC
@@ -345,7 +352,7 @@ def connect_port():
                                                          list_comport["current_sp_name"])
     if list_comport["current_interface"] in ['USBCOM', 'USBCOM-SC']:
         show_infor = show_infor + ', Host_PortName: {}'.format(list_comport["current_host_name"])
-    print(show_infor)
+    print_message_to_console(show_infor)
     sp = Connection(port=list_comport["current_sp_name"])
     sp.open_port()
     return sp, list_comport

@@ -1,11 +1,13 @@
 import os.path
 import sys
-sys.path.insert(0, r'..\FRS_AutoHDL')
+sys.path.insert(0, r'..\..\FRS_AutoHDL')
 
 from robot.libraries.BuiltIn import BuiltIn
 from MetaData import common_data as comdata
 from Library import dlrmus
 from Library import connection as con
+from common import print_message_to_console
+
 
 def exe_hostdownload(interface, update_type, file_type, build, last_build, path_release_root):
     connect_port = con.connect_port()
@@ -30,8 +32,8 @@ def exe_hostdownload(interface, update_type, file_type, build, last_build, path_
         dlr.execute()
         # class method verify data
     else:
-        BuiltIn().log('Cannot run testcase because did not found file: {} \n or file: {}'
-                      .format(build_from, build_to), level='WARN')
+        print_message_to_console('Cannot run testcase because did not found file: {} \n or file: {}'
+                      .format(build_from, build_to))
 
 
 def execute_sp():

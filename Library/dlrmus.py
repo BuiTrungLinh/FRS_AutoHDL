@@ -2,6 +2,7 @@ import subprocess
 import time
 
 import Library.service_port as serviceport
+from Library.common import print_message_to_console
 from MetaData.common_data import Dlrmus as comdlr
 from MetaData import common_data as comdata
 from Library import connection as con
@@ -51,7 +52,7 @@ class Dlrmus:
             case comdata.USBOEM.interface_type:
                 current_scanner_if = comdata.Interface.usboem_index
 
-        print('from build: ' + self.from_build + ' to build ' + self.to_build + ' with interface ' + self.dlr_interface)
+        print_message_to_console('from build: ' + self.from_build + ' to build ' + self.to_build + ' with interface ' + self.dlr_interface)
         # load from_build into scanner by ServicePort method
         cmd_dlrmus_sp = (self.path_file_dlrmus + ' '
                          + comdlr.p_select_interface + ' '
@@ -60,8 +61,9 @@ class Dlrmus:
                          + self.from_build)
         # close sp because drmus update by sp
         self.sp.close_port()
-        print(cmd_dlrmus_sp)
-        # subprocess.run(cmd_dlrmus_sp)
+        print_message_to_console('SP: Load build "{}" to scanner.'.format(self.from_build))
+        print_message_to_console(cmd_dlrmus_sp)
+        subprocess.run(cmd_dlrmus_sp)
         time.sleep(5)
         self.sp.open_port()
         # check build is load success
@@ -96,7 +98,8 @@ class Dlrmus:
                            + set_baudrate
                            + comdlr.p_select_path_file + ' '
                            + self.to_build)
-        print(cmd_dlrmus_host)
+        print_message_to_console('Host: Update scanner to build "{}" via host.'.format(self.to_build))
+        print_message_to_console(cmd_dlrmus_host)
         subprocess.run(cmd_dlrmus_host)
 
         # check current status of DLRMUS, if 100%, copy log, verify scanner
