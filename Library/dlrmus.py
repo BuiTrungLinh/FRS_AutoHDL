@@ -77,6 +77,11 @@ class Dlrmus:
 
         # prepare something before HDL such as clear event_log
         self.sp.send_command(comdata.SPCommand.erase_event)
+        self.sp.send_command(comdata.SPCommand.write + comdata.SPCommand.erase_ule)
+        self.sp.send_command(comdata.SPCommand.write + comdata.SPCommand.erase_customdata)
+
+        # get data before to running HDL
+
 
         # load to_build into scanner by HDL method
         # add more -c portname if interface is USBCOM, USBCOMSC

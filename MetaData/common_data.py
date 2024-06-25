@@ -119,6 +119,8 @@ class SPCommand:
     save = "0012"
     reset = "001A"
     erase_event = "0024"
+    erase_ule = "7FF800000000"
+    erase_customdata = "7FF700000000"
     good_beep = "001C"
     get_statistics_log = "0031"
     get_statistics_enhanced_log = "0131"
@@ -126,6 +128,8 @@ class SPCommand:
     get_event_log_entry_enhanced = "012C"
     get_event_log_entry_enhanced_translated = "022C"
     get_hwid = "024008"
+    get_ule = "7FF8"
+    get_customdata = "7FF7"
     set_interface = "0001"
     # 	00=None, 01=Even, 02=Odd
     set_parity = "001F"
@@ -201,6 +205,11 @@ class Message:
     Error_No_Selected_UpdateType = 'Please select at least 1 update-type!'
     Error_No_Selected_Release = 'Please select at least 1 release!'
     Error_No_Located_Path = 'Please enter the path containing release!'
+    Noti_Verify_Cfg = '----------------Start Verifying Config Valueset----------------'
+    Noti_Verify_Iden = '----------------Start Verifying Identification----------------'
+    Noti_Verify_Event = '----------------Start Verifying Event-Log----------------'
+    Noti_Verify_ULE = '----------------Start Verifying ULE----------------'
+    Noti_Verify_Wav = '----------------Start Verifying WAV-file----------------'
 
 
 class Product:
