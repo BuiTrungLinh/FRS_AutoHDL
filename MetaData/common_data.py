@@ -211,6 +211,10 @@ class Message:
     Noti_Verify_Event = '----------------Start Verifying Event-Log----------------'
     Noti_Verify_ULE = '----------------Start Verifying ULE----------------'
     Noti_Verify_Wav = '----------------Start Verifying WAV-file----------------'
+    Succ_Dlrmus_Update_SP = 'Updated {} build to the scanner by ServicePort successfully'
+    Succ_Dlrmus_Update_Host = 'Updated {} build to the scanner by Host {} successfully'
+    Error_Dlrmus_Update_SP = 'ERR: Failed update of {} build for scanner through ServicePort'
+    Error_Dlrmus_Update_Host = 'ERR: Failed update of {} build for scanner through Host {}'
 
 
 class Product:

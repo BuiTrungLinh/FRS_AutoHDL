@@ -1,5 +1,5 @@
 from Library import global_var
-from Library.common import print_message_to_console
+from Library.setting import print_message_to_console
 from Library.service_port import GetScannerIHS
 from MetaData.common_data import Message as msg
 from MetaData.common_data import Identification as iden

@@ -7,7 +7,7 @@ import sys
 import traceback
 import time
 import Library.service_port as Service_Port
-from Library.common import print_message_to_console
+from Library.setting import print_message_to_console
 from MetaData.common_data import SPCommand as spcmd
 
 

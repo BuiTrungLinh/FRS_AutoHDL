@@ -2,11 +2,11 @@ import subprocess
 import time
 
 import Library.service_port as serviceport
-from Library.common import print_message_to_console
+from Library.setting import print_message_to_console
 from MetaData.common_data import Dlrmus as comdlr
 from MetaData import common_data as comdata
 from Library import connection as con
-from Library import global_var
+
 
 class Dlrmus:
 
@@ -35,7 +35,7 @@ class Dlrmus:
                 self.dlr_interface = comdata.Dlrmus.i_RS232_STD
 
     # Sample Method
-    def execute(self):
+    def update_by_host(self):
         # 1 = RS232STD
         current_scanner_if = 1
         match serviceport.GetScannerIHS(self.sp).Scanner_Interface_Number:
@@ -51,22 +51,6 @@ class Dlrmus:
                 current_scanner_if = comdata.Interface.usbcomsc_index
             case comdata.USBOEM.interface_type:
                 current_scanner_if = comdata.Interface.usboem_index
-
-        print_message_to_console('from build: ' + self.from_build + ' to build ' + self.to_build + ' with interface ' + self.dlr_interface)
-        # load from_build into scanner by ServicePort method
-        cmd_dlrmus_sp = (self.path_file_dlrmus + ' '
-                         + comdlr.p_select_interface + ' '
-                         + comdlr.i_ServicePort + ' '
-                         + comdlr.p_select_path_file + ' '
-                         + self.from_build)
-        # close sp because drmus update by sp
-        self.sp.close_port()
-        print_message_to_console('SP: Load build "{}" to scanner.'.format(self.from_build))
-        print_message_to_console(cmd_dlrmus_sp)
-        subprocess.run(cmd_dlrmus_sp)
-        time.sleep(5)
-        self.sp.open_port()
-        # check build is load success
         # setting baudrate, databits, stopbits, parity for scanner, prepare before updating by host
         serviceport.set_interface(self.sp, self.interface)
         # Update current_host_name, current_sp_name, sp if current IFs != previous IFs
@@ -75,15 +59,6 @@ class Dlrmus:
             re_connect = con.connect_port()
             self.__init__(re_connect[0], interface=self.interface, host_port_name=re_connect[1]['current_host_name'])
 
-        # prepare something before HDL such as clear event_log
-        self.sp.send_command(comdata.SPCommand.sp_erase_event)
-        self.sp.send_command(comdata.SPCommand.sp_write_cfg + comdata.SPCommand.cfg_erase_ule)
-        self.sp.send_command(comdata.SPCommand.sp_write_cfg + comdata.SPCommand.cfg_erase_customdata)
-        self.sp.send_command(comdata.SPCommand.sp_save)
-        self.sp.send_command(comdata.SPCommand.sp_reset)
-        # get data before to running HDL
-        global_var.__gbefore_scanner_ihs = serviceport.GetScannerIHS(self.sp).dict_data
-        global_var.__gbefore_statistics_enhanced = serviceport.get_enhanced_statistics(self.sp)
         # load to_build into scanner by HDL method
         # add more -c portname if interface is USBCOM, USBCOMSC
         set_host_port_name = ''
@@ -107,6 +82,24 @@ class Dlrmus:
         print_message_to_console('Host: Update scanner to build "{}" via host.'.format(self.to_build))
         print_message_to_console(cmd_dlrmus_host)
         subprocess.run(cmd_dlrmus_host)
-
+        # check build is load done
+        # Code something here ...s
         # check current status of DLRMUS, if 100%, copy log, verify scanner
-        return 'logfile'
+        return True
+
+    def update_by_sp(self):
+        cmd_dlrmus_sp = (self.path_file_dlrmus + ' '
+                         + comdlr.p_select_interface + ' '
+                         + comdlr.i_ServicePort + ' '
+                         + comdlr.p_select_path_file + ' '
+                         + self.from_build)
+        # close sp because dlrmus is using it
+        self.sp.close_port()
+        print_message_to_console('SP: Load build "{}" to scanner.'.format(self.from_build))
+        print_message_to_console(cmd_dlrmus_sp)
+        subprocess.run(cmd_dlrmus_sp)
+        time.sleep(5)
+        self.sp.open_port()
+        # check build is load done
+        # Code something here ...s
+        return True
