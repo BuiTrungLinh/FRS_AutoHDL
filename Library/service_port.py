@@ -67,30 +67,19 @@ def set_interface(sp, interface):
         sp_interface = comdata.USBCOMSC.interface_type
     elif interface == comdata.Interface.usboem_index:
         sp_interface = comdata.USBOEM.interface_type
-    sp.send_command(comdata.SPCommand.write + comdata.SPCommand.set_interface + sp_interface)
-    sp.send_command(comdata.SPCommand.write + comdata.SPCommand.set_baudrate + baudrate)
-    sp.send_command(comdata.SPCommand.write + comdata.SPCommand.set_databits + databits)
-    sp.send_command(comdata.SPCommand.write + comdata.SPCommand.set_stopbits + stopbits)
-    sp.send_command(comdata.SPCommand.write + comdata.SPCommand.set_parity + parity)
-    sp.send_command(comdata.SPCommand.save)
-    sp.send_command(comdata.SPCommand.reset)
+    sp.send_command(comdata.SPCommand.sp_write_cfg + comdata.SPCommand.cfg_interface + sp_interface)
+    sp.send_command(comdata.SPCommand.sp_write_cfg + comdata.SPCommand.cfg_baudrate + baudrate)
+    sp.send_command(comdata.SPCommand.sp_write_cfg + comdata.SPCommand.cfg_databits + databits)
+    sp.send_command(comdata.SPCommand.sp_write_cfg + comdata.SPCommand.cfg_stopbits + stopbits)
+    sp.send_command(comdata.SPCommand.sp_write_cfg + comdata.SPCommand.cfg_parity + parity)
+    sp.send_command(comdata.SPCommand.sp_save)
+    sp.send_command(comdata.SPCommand.sp_reset)
     time.sleep(10)
-
-
-def get_scanner_current_information(sp, info):
-    idenStr = str(sp.send_command(comdata.SPCommand.get_identification))
-    healthStr = ''
-    statisticsStr = ''
-    tmp_combine = idenStr + healthStr + statisticsStr
-    infor_list = tmp_combine.replace('\\x03', '').split('\\x02')
-    for data in infor_list:
-        if data.startswith(info):
-            return data[1:]
 
 
 class GetScannerIHS:
     def __init__(self, sp):
-        idenStr = str(sp.send_command(comdata.SPCommand.get_identification))
+        idenStr = str(sp.send_command(comdata.SPCommand.sp_get_identification))
         healthStr = ''
         statisticsStr = ''
         tmp_combine = idenStr + healthStr + statisticsStr
@@ -152,3 +141,17 @@ class GetScannerIHS:
                 case comdata.Identification.Interface_Bootloader_ROM_ID:
                     self.Interface_Bootloader_ROM_ID = data[1:]
                     self.dict_data['Interface_Bootloader_ROM_ID'] = data[1:]
+
+
+def get_enhanced_statistics(sp):
+    # 0x01<index:2> - read the statistics information for statistics specified by index returning:
+    # <index:2><id:2><value:4><null terminated string descriptor if available>
+    total_number = int.from_bytes(sp.send_command(comdata.SPCommand.sp_get_statistics_enhanced_number), "big")
+    dict_stat = {}
+    for index in range(total_number - 1):
+        str_index = str(hex(index).split('x')[-1])
+        value = ('0' * (4 - len(str_index))) + str_index
+        stat = sp.send_command(comdata.SPCommand.sp_get_statistics_enhanced_index + value)
+        dict_stat[index] = {'id': int.from_bytes(stat[2:4], "big"), 'value': int.from_bytes(stat[4:8], "big"),
+                            'des': stat[8:-1].decode("utf-8")}
+    return dict_stat

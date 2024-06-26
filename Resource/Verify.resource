@@ -1,4 +1,5 @@
 *** Settings ***
+Library    ../Library/verification.py
 
 *** Variables ***
 

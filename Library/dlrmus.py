@@ -6,7 +6,7 @@ from Library.common import print_message_to_console
 from MetaData.common_data import Dlrmus as comdlr
 from MetaData import common_data as comdata
 from Library import connection as con
-
+from Library import global_var
 
 class Dlrmus:
 
@@ -38,7 +38,7 @@ class Dlrmus:
     def execute(self):
         # 1 = RS232STD
         current_scanner_if = 1
-        match serviceport.get_scanner_current_information(self.sp, comdata.Identification.Scanner_Interface_Number):
+        match serviceport.GetScannerIHS(self.sp).Scanner_Interface_Number:
             case comdata.RS232STD.interface_type:
                 current_scanner_if = comdata.Interface.rs232std_index
             case comdata.RS232WN.interface_type:
@@ -76,13 +76,14 @@ class Dlrmus:
             self.__init__(re_connect[0], interface=self.interface, host_port_name=re_connect[1]['current_host_name'])
 
         # prepare something before HDL such as clear event_log
-        self.sp.send_command(comdata.SPCommand.erase_event)
-        self.sp.send_command(comdata.SPCommand.write + comdata.SPCommand.erase_ule)
-        self.sp.send_command(comdata.SPCommand.write + comdata.SPCommand.erase_customdata)
-
+        self.sp.send_command(comdata.SPCommand.sp_erase_event)
+        self.sp.send_command(comdata.SPCommand.sp_write_cfg + comdata.SPCommand.cfg_erase_ule)
+        self.sp.send_command(comdata.SPCommand.sp_write_cfg + comdata.SPCommand.cfg_erase_customdata)
+        self.sp.send_command(comdata.SPCommand.sp_save)
+        self.sp.send_command(comdata.SPCommand.sp_reset)
         # get data before to running HDL
-
-
+        global_var.__gbefore_scanner_ihs = serviceport.GetScannerIHS(self.sp).dict_data
+        global_var.__gbefore_statistics_enhanced = serviceport.get_enhanced_statistics(self.sp)
         # load to_build into scanner by HDL method
         # add more -c portname if interface is USBCOM, USBCOMSC
         set_host_port_name = ''

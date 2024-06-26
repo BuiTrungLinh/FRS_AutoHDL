@@ -115,32 +115,33 @@ class Dlrmus:
 
 
 class SPCommand:
-    get_identification = "011C"
-    save = "0012"
-    reset = "001A"
-    erase_event = "0024"
-    erase_ule = "7FF800000000"
-    erase_customdata = "7FF700000000"
-    good_beep = "001C"
-    get_statistics_log = "0031"
-    get_statistics_enhanced_log = "0131"
-    get_event_log_entry = "002C"
-    get_event_log_entry_enhanced = "012C"
-    get_event_log_entry_enhanced_translated = "022C"
-    get_hwid = "024008"
-    get_ule = "7FF8"
-    get_customdata = "7FF7"
-    set_interface = "0001"
+    # SP COMMAND =======
+    sp_get_identification = "011C"
+    sp_save = "0012"
+    sp_reset = "001A"
+    sp_erase_event = "0024"
+    sp_good_beep = "001C"
+    sp_get_statistics_enhanced_number = "013100"
+    sp_get_statistics_enhanced_index = "013101"
+    sp_get_event_log_entry_enhanced_translated = "022C"
+    sp_get_hwid = "024008"
+    sp_write_cfg = "0010"
+    sp_read_cfg = "0011"
+
+    # CONFIG TAG =======
+    cfg_erase_ule = "7FF800000000"
+    cfg_erase_customdata = "7FF700000000"
+    cfg_ule = "7FF8"
+    cfg_customdata = "7FF7"
+    cfg_interface = "0001"
     # 	00=None, 01=Even, 02=Odd
-    set_parity = "001F"
+    cfg_parity = "001F"
     #   01=9600, 08=115200
-    set_baudrate = "001D"
+    cfg_baudrate = "001D"
     # 	00=Seven data bits, 01=Eight data bits
-    set_databits = "009B"
+    cfg_databits = "009B"
     #   00=one, 01=two
-    set_stopbits = "0022"
-    write = "0010"
-    read = "0011"
+    cfg_stopbits = "0022"
 
 
 class Identification:

@@ -1,3 +1,4 @@
+from Library import global_var
 from Library.common import print_message_to_console
 from Library.service_port import GetScannerIHS
 from MetaData.common_data import Message as msg
@@ -6,9 +7,8 @@ from MetaData.common_data import SPCommand as sp_cmd
 
 
 class Verification:
-    def __init__(self, sp):
+    def __init__(self, sp=None):
         self.sp = sp
-        self.before_scanner_ihs = {}
 
     def verify_iden(self):
         print_message_to_console(msg.Noti_Verify_Iden)
@@ -20,7 +20,7 @@ class Verification:
                     'Remote_Display_Version': '',
                     'Serial_Number': '',
                     'Model_Number': '',
-                    'Main_Board_Serial_Number': ''}
+                     'Main_Board_Serial_Number': ''}
         # add expected into dict, obser into dict, compare
         # build, eclevel, cfg name,
 

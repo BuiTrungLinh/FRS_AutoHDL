@@ -312,7 +312,7 @@ def get_ports_list():
                 con = Connection(port=port.name)
                 try:
                     con.open_port()
-                    con.send_command(command=spcmd.get_identification)
+                    con.send_command(command=spcmd.sp_get_identification)
                     current_sp_name = port.name
                     isFoundSP = True
                     con.close_port()
