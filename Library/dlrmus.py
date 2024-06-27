@@ -6,18 +6,18 @@ from Library.setting import print_message_to_console
 from MetaData.common_data import Dlrmus as comdlr
 from MetaData import common_data as comdata
 from Library import connection as con
+from Library import setting as sett
 
 
 class Dlrmus:
 
-    def __init__(self, sp, from_build='', to_build='', interface=0, host_port_name=''):
-        self.sp = sp
+    def __init__(self, from_build='', to_build='', interface=0):
+        self.sp = sett.__gServicePort
         self.from_build = from_build
         self.to_build = to_build
         self.interface = interface
-        self.host_port_name = host_port_name[3:]
-        # self.path_file_dlrmus = r'..\Tools\DLRMUs\dlrmus.exe'
-        self.path_file_dlrmus = r'D:\1.DevelopmentTool\PycharmProjects\FRS_AutoHDL\Tools\DLRMUs\dlrmus.exe'
+        self.host_port_name = sett.__gHostPort[3:]
+        self.path_file_dlrmus = comdata.Dlrmus.path_file_dlrmus
         match interface:
             case comdata.Interface.rs232std_index:
                 self.dlr_interface = comdata.Dlrmus.i_RS232_STD
@@ -51,14 +51,6 @@ class Dlrmus:
                 current_scanner_if = comdata.Interface.usbcomsc_index
             case comdata.USBOEM.interface_type:
                 current_scanner_if = comdata.Interface.usboem_index
-        # setting baudrate, databits, stopbits, parity for scanner, prepare before updating by host
-        serviceport.set_interface(self.sp, self.interface)
-        # Update current_host_name, current_sp_name, sp if current IFs != previous IFs
-        if self.interface != current_scanner_if:
-            current_scanner_if = self.interface
-            re_connect = con.connect_port()
-            self.__init__(re_connect[0], interface=self.interface, host_port_name=re_connect[1]['current_host_name'])
-
         # load to_build into scanner by HDL method
         # add more -c portname if interface is USBCOM, USBCOMSC
         set_host_port_name = ''

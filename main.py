@@ -9,13 +9,14 @@ import GUI.gui_main as gui_main
 import Library.testcase as tcs
 from MetaData.testcase_data import FormatTcs as gen_tcs_name
 from Library import testcase as tcs
+from Library import setting as sett
 
 sp = None
 
 if __name__ == '__main__':
-    connect_port = con.connect_port()
-    sp = connect_port[0]
-    dictPort = connect_port[1]
+    con.connect_port()
+    sp = sett.__gServicePort
+    current_host_name = sett.__gHostPort
     # current_build = service_port.get_scanner_current_information(sp, comdata.Identification.Application_ROM_ID)
     # load GUI menu for current_hwid product
     # gui = gui_main.MainGUI(sp.send_command(comdata.SPCommand.get_hwid))
@@ -71,8 +72,7 @@ if __name__ == '__main__':
                     build_from = build_from + '.S37'
                     build_to = build_to + file_format
                     if os.path.isfile(build_from) and os.path.isfile(build_to):
-                        dlr = dlrmus.Dlrmus(sp, from_build=build_from, to_build=build_to,
-                                            interface=interface, host_port_name=dictPort['current_host_name'])
+                        dlr = dlrmus.Dlrmus(from_build=build_from, to_build=build_to, interface=interface)
                         # dlr.execute()
                         a = ''
                         # class method verify data

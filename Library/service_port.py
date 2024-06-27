@@ -155,3 +155,7 @@ def get_enhanced_statistics(sp):
         dict_stat[index] = {'id': int.from_bytes(stat[2:4], "big"), 'value': int.from_bytes(stat[4:8], "big"),
                             'des': stat[8:-1].decode("utf-8")}
     return dict_stat
+
+def erase_sound_file():
+    # ToDo
+    return

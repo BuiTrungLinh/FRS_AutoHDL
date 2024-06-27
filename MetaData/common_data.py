@@ -112,6 +112,8 @@ class Dlrmus:
     p_select_comport = "-c"
     p_start_baudrate = "-b"
     v_baudrate_115200 = '115200'
+    # path_file_dlrmus = r'..\Tools\DLRMUs\dlrmus.exe'
+    path_file_dlrmus = r'D:\1.DevelopmentTool\PycharmProjects\FRS_AutoHDL\Tools\DLRMUs\dlrmus.exe'
 
 
 class SPCommand:

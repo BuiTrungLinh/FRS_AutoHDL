@@ -342,20 +342,22 @@ def get_ports_list():
 
 
 def connect_port():
-    list_comport = get_ports_list()
-    if not list_comport["isFoundSP"]:
+    dict_comport = get_ports_list()
+    if not dict_comport["isFoundSP"]:
         print_message_to_console('Warning: Could not find any Datalogic\'s "ServicePort"')
         sys.exit()
 
     # Show host port name if IF = USBCOM, USBCOMSC
-    show_infor = 'Interface: {}, SP_PortName: {}'.format(list_comport["current_interface"],
-                                                         list_comport["current_sp_name"])
-    if list_comport["current_interface"] in ['USBCOM', 'USBCOM-SC']:
-        show_infor = show_infor + ', Host_PortName: {}'.format(list_comport["current_host_name"])
+    show_infor = 'Interface: {}, SP_PortName: {}'.format(dict_comport["current_interface"],
+                                                         dict_comport["current_sp_name"])
+    if dict_comport["current_interface"] in ['USBCOM', 'USBCOM-SC']:
+        show_infor = show_infor + ', Host_PortName: {}'.format(dict_comport["current_host_name"])
     print_message_to_console(show_infor)
-    sp = Connection(port=list_comport["current_sp_name"])
+    sp = Connection(port=dict_comport["current_sp_name"])
     sp.open_port()
-    return sp, list_comport
+    __gServicePort = sp
+    __gHostPort = dict_comport['current_host_name']
+    __gCurrentInterface = dict_comport['current_interface']
 
 
 def process_return_extended_data(data):
