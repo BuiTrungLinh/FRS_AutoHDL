@@ -3,7 +3,7 @@ Resource    ../Resource/ExecuteHDL.resource
 Resource    ../Resource/Verify.resource
 Resource    ../Resource/Setting.resource
 Variables    ../MetaData/common_data.py
-Test Setup       Setup
+Test Setup       Setup      900i
 Test Teardown    Teardown
 
 *** Variables ***

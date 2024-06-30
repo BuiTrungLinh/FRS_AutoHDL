@@ -6,3 +6,4 @@ Library    ../Library/verification.py
 *** Keywords ***
 Verify HDL
     [Arguments]
+    Log    message

@@ -5,17 +5,18 @@ import Library.service_port as serviceport
 from Library import connection as con
 
 global __gbefore_scanner_ihs, \
-    __gstatistics_enhanced, \
+    __gbefore_statistics_enhanced, \
     __gServicePort, \
     __gHostPort, \
-    __gCurrentInterface
+    __gCurrentInterface, \
+    __gProductID
 
 
 def print_message_to_console(msg=''):
     BuiltIn().log_to_console(msg)
 
 
-def prepare_before(interface):
+def execute_before_hdl(interface):
     current_scanner_if = 1
     match serviceport.GetScannerIHS(__gServicePort).Scanner_Interface_Number:
         case comdata.RS232STD.interface_type:
@@ -41,6 +42,10 @@ def prepare_before(interface):
     __gServicePort.send_command(comdata.SPCommand.sp_write_cfg + comdata.SPCommand.cfg_erase_ule)
     # erase customdata
     __gServicePort.send_command(comdata.SPCommand.sp_write_cfg + comdata.SPCommand.cfg_erase_customdata)
+    # erase overide file
+    __gServicePort.send_command(comdata.SPCommand.sp_erase_custom_file)
+    # update config name
+    # Todo
     # erase .wav file
     serviceport.erase_sound_file()
     # save and reset
@@ -53,9 +58,26 @@ def prepare_before(interface):
     __gbefore_statistics_enhanced = serviceport.get_enhanced_statistics(__gServicePort)
 
 
-def execute_setup():
+def execute_setup(product_id):
+    __gProductID = product_id
     con.connect_port()
 
 
 def execute_teardown():
-    return
+    # clear event_log
+    __gServicePort.send_command(comdata.SPCommand.sp_erase_event)
+    # erase ULE
+    __gServicePort.send_command(comdata.SPCommand.sp_write_cfg + comdata.SPCommand.cfg_erase_ule)
+    # erase customdata
+    __gServicePort.send_command(comdata.SPCommand.sp_write_cfg + comdata.SPCommand.cfg_erase_customdata)
+    # erase overide file
+    __gServicePort.send_command(comdata.SPCommand.sp_erase_custom_file)
+    # update config name
+    # Todo
+    # erase .wav file
+    serviceport.erase_sound_file()
+    # save and reset
+    __gServicePort.send_command(comdata.SPCommand.sp_save)
+    __gServicePort.send_command(comdata.SPCommand.sp_reset)
+    time.sleep(5)
+    __gServicePort.close_port()
