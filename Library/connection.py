@@ -7,8 +7,8 @@ import sys
 import traceback
 import time
 import Library.service_port as Service_Port
-from Library.setting import print_message_to_console
 from MetaData.common_data import SPCommand as spcmd
+import Library.setting as sett
 
 
 class Protocol(object):
@@ -317,7 +317,7 @@ def get_ports_list():
                     isFoundSP = True
                     con.close_port()
                 except:
-                    con.close_port()
+                    # con.close_port()
                     current_host_name = port.name
 
             # 16384 = 4000 (DEC to HEX)
@@ -344,7 +344,7 @@ def get_ports_list():
 def connect_port():
     dict_comport = get_ports_list()
     if not dict_comport["isFoundSP"]:
-        print_message_to_console('Warning: Could not find any Datalogic\'s "ServicePort"')
+        sett.print_message_to_console('Warning: Could not find any Datalogic\'s "ServicePort"')
         sys.exit()
 
     # Show host port name if IF = USBCOM, USBCOMSC
@@ -352,12 +352,12 @@ def connect_port():
                                                          dict_comport["current_sp_name"])
     if dict_comport["current_interface"] in ['USBCOM', 'USBCOM-SC']:
         show_infor = show_infor + ', Host_PortName: {}'.format(dict_comport["current_host_name"])
-    print_message_to_console(show_infor)
+    sett.print_message_to_console(show_infor)
     sp = Connection(port=dict_comport["current_sp_name"])
     sp.open_port()
-    __gServicePort = sp
-    __gHostPort = dict_comport['current_host_name']
-    __gCurrentInterface = dict_comport['current_interface']
+    sett.__gServicePort = sp
+    sett.__gHostPort = dict_comport['current_host_name']
+    sett.__gCurrentInterface = dict_comport['current_interface']
 
 
 def process_return_extended_data(data):

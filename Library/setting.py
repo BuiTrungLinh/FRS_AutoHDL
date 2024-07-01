@@ -59,6 +59,7 @@ def execute_before_hdl(interface):
 
 
 def execute_setup(product_id):
+    global __gProductID
     __gProductID = product_id
     con.connect_port()
 

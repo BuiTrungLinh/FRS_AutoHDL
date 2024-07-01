@@ -17,7 +17,7 @@ class Dlrmus:
         self.to_build = to_build
         self.interface = interface
         self.host_port_name = sett.__gHostPort[3:]
-        self.path_file_dlrmus = comdata.Dlrmus.path_file_dlrmus
+        self.path_file_dlrmus = comdata.PathFiles.path_file_dlrmus
         match interface:
             case comdata.Interface.rs232std_index:
                 self.dlr_interface = comdata.Dlrmus.i_RS232_STD

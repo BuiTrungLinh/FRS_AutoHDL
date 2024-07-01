@@ -112,12 +112,18 @@ class Dlrmus:
     p_select_comport = "-c"
     p_start_baudrate = "-b"
     v_baudrate_115200 = '115200'
+
+
+class PathFiles:
     # path_file_dlrmus = r'..\Tools\DLRMUs\dlrmus.exe'
     path_file_dlrmus = r'D:\1.DevelopmentTool\PycharmProjects\FRS_AutoHDL\Tools\DLRMUs\dlrmus.exe'
+    path_sw_release = r'MetaData/software_release.json'
+    path_sw_infor = r'MetaData/software_information.json'
 
 
 class SPCommand:
     # SP COMMAND =======
+    sp_aaa = '011B'
     sp_get_identification = "011C"
     sp_save = "0012"
     sp_reset = "001A"
@@ -127,6 +133,7 @@ class SPCommand:
     sp_get_statistics_enhanced_index = "013101"
     sp_get_event_log_entry_enhanced_translated = "022C"
     sp_get_hwid = "024008"
+    sp_erase_custom_file = "1520"
     sp_write_cfg = "0010"
     sp_read_cfg = "0011"
 
@@ -144,6 +151,12 @@ class SPCommand:
     cfg_databits = "009B"
     #   00=one, 01=two
     cfg_stopbits = "0022"
+
+
+class SWInfor:
+    Application_ROM_ID = 'App'
+    Revision_ECLevel = 'EC'
+    Configuration_ID = 'Cfg'
 
 
 class Identification:
@@ -180,25 +193,47 @@ class Health:
 
 
 class Statistics:
-    Power_on_time_in_hours = "P"
-    Number_of_labels_read = "L"
-    Scale_Calibration_attempts = "c"
-    Scale_zero_attempts = "z"
-    Custom_Data = "C"
-    Successful_EAS_deactivations_ = "e"
-    Number_of_manual_EAS_deactivations = "E"
-    Number_of_EAS_manual_runtime_errors = "Y"
-    Total_Resets = "R"
-    Error_Resets = "r"
-    Vertical_IPE_forced_resets = "V"
-    Horizontal_IPE_forced_resets = "H"
-    DWM_IPE_forced_resets = "D"
-    Vertical_IPE_excessive_resets = "v"
-    Horizontal_IPE_excessive_resets = "h"
-    DWM_IPE_excessive_resets = "d"
-    Scale_sentry_activations = "S"
-    POS_initiated_zero_requests = "Z"
-    Enforced_zero_events = "X"
+    # s: short
+    s_Power_on_time_in_hours = "P"
+    s_Number_of_labels_read = "L"
+    s_Scale_Calibration_attempts = "c"
+    s_Scale_zero_attempts = "z"
+    s_Custom_Data = "C"
+    s_Successful_EAS_deactivations_ = "e"
+    s_Number_of_manual_EAS_deactivations = "E"
+    s_Number_of_EAS_manual_runtime_errors = "Y"
+    s_Total_Resets = "R"
+    s_Error_Resets = "r"
+    s_Vertical_IPE_forced_resets = "V"
+    s_Horizontal_IPE_forced_resets = "H"
+    s_DWM_IPE_forced_resets = "D"
+    s_Vertical_IPE_excessive_resets = "v"
+    s_Horizontal_IPE_excessive_resets = "h"
+    s_DWM_IPE_excessive_resets = "d"
+    s_Scale_sentry_activations = "S"
+    s_POS_initiated_zero_requests = "Z"
+    s_Enforced_zero_events = "X"
+
+    # l: long
+    l_Power_on_time_in_hours = "Power on time in hours"
+    l_Number_of_labels_read = "Number_of_labels_read"
+    l_Scale_Calibration_attempts = "Scale_Calibration_attempts"
+    l_Scale_zero_attempts = "Scale_zero_attempts"
+    l_Custom_Data = "Custom_Data"
+    l_Successful_EAS_deactivations_ = "Successful_EAS_deactivations_"
+    l_Number_of_manual_EAS_deactivations = "Number_of_manual_EAS_deactivations"
+    l_Number_of_EAS_manual_runtime_errors = "Number_of_EAS_manual_runtime_errors"
+    l_Total_Resets = "Total_Resets"
+    l_Error_Resets = "Error_Resets"
+    l_Vertical_IPE_forced_resets = "Vertical_IPE_forced_resets"
+    l_Horizontal_IPE_forced_resets = "Horizontal_IPE_forced_resets"
+    l_DWM_IPE_forced_resets = "DWM_IPE_forced_resets"
+    l_Vertical_IPE_excessive_resets = "Vertical_IPE_excessive_resets"
+    l_Horizontal_IPE_excessive_resets = "Horizontal_IPE_excessive_resets"
+    l_DWM_IPE_excessive_resets = "d"
+    l_Scale_sentry_activations = "S"
+    l_POS_initiated_zero_requests = "Z"
+    l_Enforced_zero_events = "X"
 
 
 class Message:

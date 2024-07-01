@@ -17,6 +17,7 @@ if __name__ == '__main__':
     con.connect_port()
     sp = sett.__gServicePort
     current_host_name = sett.__gHostPort
+    aaa = sp.send_command(comdata.SPCommand.sp_aaa)
     # current_build = service_port.get_scanner_current_information(sp, comdata.Identification.Application_ROM_ID)
     # load GUI menu for current_hwid product
     # gui = gui_main.MainGUI(sp.send_command(comdata.SPCommand.get_hwid))

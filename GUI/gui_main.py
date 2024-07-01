@@ -10,7 +10,7 @@ import json
 
 class MainGUI:
     def __init__(self):
-        with open('MetaData/software_release.json') as json_file:
+        with open(comdata.PathFiles.path_sw_release) as json_file:
             self.dict_release = json.load(json_file)
         self.path_release = ''
         self.dict_current_release = {}
