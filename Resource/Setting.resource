@@ -1,5 +1,5 @@
 *** Settings ***
-Library     ../Library/setting.py
+Library    ../Library/setting.py
 
 *** Variables ***
 
@@ -12,7 +12,7 @@ Setup Before HostDownload
 Setup
     [Documentation]
     [Arguments]     ${PRODUCT_ID}
-    Execute Setup   ${PRODUCT_ID}
+    Execute Setup    ${PRODUCT_ID}
 
 Teardown
     [Documentation]     After running HDL, set the scanner to the original settings

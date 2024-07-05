@@ -1,24 +1,46 @@
 import time
 from robot.libraries.BuiltIn import BuiltIn
-from MetaData import common_data as comdata
 import Library.service_port as serviceport
-from Library import connection as con
-
-global __gbefore_scanner_ihs, \
-    __gbefore_statistics_enhanced, \
-    __gServicePort, \
-    __gHostPort, \
-    __gCurrentInterface, \
-    __gProductID
+import Library.connection as con
+import MetaData.common_data as comdata
+from MetaData.common_data import GlobalVar as GVar
+from MetaData.common_data import SPCommand as SpCMD
 
 
-def print_message_to_console(msg=''):
-    BuiltIn().log_to_console(msg)
+def __init__(service_port, host_port, current_ifs):
+    GVar.gSERVICE_PORT = service_port
+    GVar.gHOST_PORT = host_port
+    GVar.gCURRENT_INTERFACE = current_ifs
 
 
-def execute_before_hdl(interface):
+def execute_setup(product_id):
+    GVar.gPRODUCT_ID = product_id
+    con.connect_port()
+
+
+def execute_teardown():
+    # clear event_log
+    GVar.gSERVICE_PORT.send_command(SpCMD.sp_erase_event)
+    # erase ULE
+    GVar.gSERVICE_PORT.send_command(SpCMD.sp_write_cfg + SpCMD.cfg_erase_ule)
+    # erase customdata
+    GVar.gSERVICE_PORT.send_command(SpCMD.sp_write_cfg + SpCMD.cfg_erase_customdata)
+    # erase overide file
+    GVar.gSERVICE_PORT.send_command(SpCMD.sp_erase_custom_file)
+    # update config name
+    # Todo
+    # erase .wav file
+    serviceport.erase_sound_file()
+    # save and reset
+    GVar.gSERVICE_PORT.send_command(SpCMD.sp_save)
+    GVar.gSERVICE_PORT.send_command(SpCMD.sp_reset)
+    time.sleep(5)
+    GVar.gSERVICE_PORT.close_port()
+
+
+def execute_before_hdl(interface_name):
     current_scanner_if = 1
-    match serviceport.GetScannerIHS(__gServicePort).Scanner_Interface_Number:
+    match serviceport.GetScannerIHS(GVar.gSERVICE_PORT).Scanner_Interface_Number:
         case comdata.RS232STD.interface_type:
             current_scanner_if = comdata.Interface.rs232std_index
         case comdata.RS232WN.interface_type:
@@ -32,53 +54,35 @@ def execute_before_hdl(interface):
         case comdata.USBOEM.interface_type:
             current_scanner_if = comdata.Interface.usboem_index
     # setting baudrate, databits, stopbits, parity for scanner, prepare before updating by host
-    serviceport.set_interface(__gServicePort, interface)
+    interface = 1
+    for ifs in comdata.Interface.dict_interface:
+        if interface_name.replace('-', '').replace(' ', '').upper() == ifs['name']:
+            interface = ifs
+    serviceport.set_interface(GVar.gSERVICE_PORT, interface)
     # Update current_host_name, current_sp_name, sp if current IFs != previous IFs
     if interface != current_scanner_if:
         con.connect_port()
     # clear event_log
-    __gServicePort.send_command(comdata.SPCommand.sp_erase_event)
+    GVar.gSERVICE_PORT.send_command(SpCMD.sp_erase_event)
     # erase ULE
-    __gServicePort.send_command(comdata.SPCommand.sp_write_cfg + comdata.SPCommand.cfg_erase_ule)
+    GVar.gSERVICE_PORT.send_command(SpCMD.sp_write_cfg + SpCMD.cfg_erase_ule)
     # erase customdata
-    __gServicePort.send_command(comdata.SPCommand.sp_write_cfg + comdata.SPCommand.cfg_erase_customdata)
+    GVar.gSERVICE_PORT.send_command(SpCMD.sp_write_cfg + SpCMD.cfg_erase_customdata)
     # erase overide file
-    __gServicePort.send_command(comdata.SPCommand.sp_erase_custom_file)
+    GVar.gSERVICE_PORT.send_command(SpCMD.sp_erase_custom_file)
     # update config name
     # Todo
     # erase .wav file
     serviceport.erase_sound_file()
     # save and reset
-    __gServicePort.send_command(comdata.SPCommand.sp_save)
-    __gServicePort.send_command(comdata.SPCommand.sp_reset)
+    GVar.gSERVICE_PORT.send_command(SpCMD.sp_save)
+    GVar.gSERVICE_PORT.send_command(SpCMD.sp_reset)
     time.sleep(5)
     # get ihs before to running HDL
-    __gbefore_scanner_ihs = serviceport.GetScannerIHS(__gServicePort).dict_data
+    GVar.gBEFORE_SCANNER_IHS = serviceport.GetScannerIHS(GVar.gSERVICE_PORT).dict_data
     # get statistics before to running HDL
-    __gbefore_statistics_enhanced = serviceport.get_enhanced_statistics(__gServicePort)
+    GVar.gBEFORE_STATISTICS_ENHANCED = serviceport.get_enhanced_statistics(GVar.gSERVICE_PORT)
 
 
-def execute_setup(product_id):
-    global __gProductID
-    __gProductID = product_id
-    con.connect_port()
-
-
-def execute_teardown():
-    # clear event_log
-    __gServicePort.send_command(comdata.SPCommand.sp_erase_event)
-    # erase ULE
-    __gServicePort.send_command(comdata.SPCommand.sp_write_cfg + comdata.SPCommand.cfg_erase_ule)
-    # erase customdata
-    __gServicePort.send_command(comdata.SPCommand.sp_write_cfg + comdata.SPCommand.cfg_erase_customdata)
-    # erase overide file
-    __gServicePort.send_command(comdata.SPCommand.sp_erase_custom_file)
-    # update config name
-    # Todo
-    # erase .wav file
-    serviceport.erase_sound_file()
-    # save and reset
-    __gServicePort.send_command(comdata.SPCommand.sp_save)
-    __gServicePort.send_command(comdata.SPCommand.sp_reset)
-    time.sleep(5)
-    __gServicePort.close_port()
+def print_message_to_console(msg=''):
+    BuiltIn().log_to_console(msg)

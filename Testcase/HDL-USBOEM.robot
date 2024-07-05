@@ -7,10 +7,8 @@ Test Setup       Setup      900i
 Test Teardown    Teardown
 
 *** Variables ***
-${VAR_INTERFACE}    ${Interface}
-${VAR_UPDATE_TYPE}    ${UpdateType}
-${VAR_FILE_TYPE}    ${FileType}
 ${VAR_PATH_RELEASE}    D:${/}tmp${/}CE_Release
+${VAR_INTERFACE}    USB-OEM
 
 *** Test Cases ***
 MT_FU_HDL-USBOEM
@@ -18,10 +16,8 @@ MT_FU_HDL-USBOEM
 #    load scanner to "build_from" by ServicePort
     Load Build To Scanner By SP    DR9401648    ${VAR_PATH_RELEASE}
 #    prepare something before running HDL
-    Setup Before HostDownload   ${Interface.usboem_index}
+    Setup Before HostDownload   ${VAR_INTERFACE}
 #    execute HDL
-    Load Build To Scanner By Host    6    1
-    ...     1    DR9401648    DR9401657
-    ...     ${VAR_PATH_RELEASE}
+    Load Build To Scanner By Host   ${VAR_INTERFACE}    AppOnly     DR9401657       ${VAR_PATH_RELEASE}
 #    verify HDL
     Verify HDL

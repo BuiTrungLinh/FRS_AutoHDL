@@ -9,6 +9,7 @@ import time
 import Library.service_port as Service_Port
 from MetaData.common_data import SPCommand as spcmd
 import Library.setting as sett
+import MetaData.common_data as comdata
 
 
 class Protocol(object):
@@ -355,9 +356,7 @@ def connect_port():
     sett.print_message_to_console(show_infor)
     sp = Connection(port=dict_comport["current_sp_name"])
     sp.open_port()
-    sett.__gServicePort = sp
-    sett.__gHostPort = dict_comport['current_host_name']
-    sett.__gCurrentInterface = dict_comport['current_interface']
+    sett.__init__(host_port=dict_comport['current_host_name'], service_port=sp, current_ifs=dict_comport['current_interface'])
 
 
 def process_return_extended_data(data):

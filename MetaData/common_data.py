@@ -1,16 +1,45 @@
+class GlobalVar:
+    gBEFORE_SCANNER_IHS = None
+    gBEFORE_STATISTICS_ENHANCED = None
+    gPRODUCT_ID = None
+    gSERVICE_PORT = None
+    gHOST_PORT = None
+    gCURRENT_INTERFACE = None
+
+
 class Interface:
     rs232std_index = 1
-    rs232std_name = 'RS232-STD'
     rs232wn_index = 2
-    rs232wn_name = 'RS232-WN'
     rs232sc_index = 3
-    rs232sc_name = 'RS232-SC'
     usbcom_index = 4
-    usbcom_name = 'USB-COM'
     usbcomsc_index = 5
-    usbcomsc_name = 'USB-COM-SC'
     usboem_index = 6
-    usboem_name = 'USB-OEM'
+    dict_interface = {
+        1: {
+            'name': 'RS232STD',
+            "full_name": "RS232-STD"
+        },
+        2: {
+            'name': 'RS232WN',
+            "full_name": "RS232-WN"
+        },
+        3: {
+            'name': 'RS232SC',
+            "full_name": "RS232-SC"
+        },
+        4: {
+            'name': 'USBCOM',
+            "full_name": "USB-COM"
+        },
+        5: {
+            'name': 'USBCOMSC',
+            "full_name": "USB-COM-SC"
+        },
+        6: {
+            'name': 'USBOEM',
+            "full_name": "USB-OEM"
+        },
+    }
 
 
 class UpdateType:
@@ -38,22 +67,22 @@ class FileType:
     appcfg_index = 2
     cfgonly_index = 3
     othercfg_index = 4
-    apponly_name = 'AppOnly'
-    appcfg_name = 'AppCfg'
-    cfgonly_name = 'CfgOnly'
-    othercfg_name = 'OtherCfg'
     dict_filetype = {
         1: {
-            "name": "AppOnly"
+            'name': 'AppOnly',
+            "full_name": "App-Only"
         },
         2: {
-            "name": "AppCfg"
+            'name': 'AppCfg',
+            "full_name": "App-Cfg"
         },
         3: {
-            "name": "CfgOnly"
+            'name': 'CfgOnly',
+            "full_name": "Cfg-Only"
         },
         4: {
-            "name": "OtherCfg"
+            'name': 'OtherCfg',
+            "full_name": "Other-Cfg"
         },
     }
 
@@ -237,17 +266,20 @@ class Statistics:
 
 
 class Message:
+    # Error message
     Error_Title = 'Error-Message'
     Error_No_Selected_IFs = 'Please select at least 1 interface!'
     Error_No_Selected_FileType = 'Please select at least 1 file-type!'
     Error_No_Selected_UpdateType = 'Please select at least 1 update-type!'
     Error_No_Selected_Release = 'Please select at least 1 release!'
     Error_No_Located_Path = 'Please enter the path containing release!'
+    # Notification
     Noti_Verify_Cfg = '----------------Start Verifying Config Valueset----------------'
     Noti_Verify_Iden = '----------------Start Verifying Identification----------------'
     Noti_Verify_Event = '----------------Start Verifying Event-Log----------------'
     Noti_Verify_ULE = '----------------Start Verifying ULE----------------'
     Noti_Verify_Wav = '----------------Start Verifying WAV-file----------------'
+    # Dlrmus
     Succ_Dlrmus_Update_SP = 'Updated {} build to the scanner by ServicePort successfully'
     Succ_Dlrmus_Update_Host = 'Updated {} build to the scanner by Host {} successfully'
     Error_Dlrmus_Update_SP = 'ERR: Failed update of {} build for scanner through ServicePort'
