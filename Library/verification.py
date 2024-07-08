@@ -6,11 +6,16 @@ from Library import service_port
 from Library import setting as sett
 from MetaData.common_data import SWInfor
 from MetaData.common_data import PathFiles
+from MetaData.common_data import GlobalVar as gvar
+from MetaData.common_data import SPCommand as sp_cmd
 
 
-def verify_iden():
+def verify_iden(product_name):
     sett.print_message_to_console(msg.Noti_Verify_Iden)
-    dict_sw_infor = read_sw_infor()
+    # get current config id
+    obser_cfg_id = gvar.gSERVICE_PORT.send_command(sp_cmd.sp_read_cfg + sp_cmd.cfg_config_file_id)
+    dict_sw_infor = read_sw_infor(product_name)
+    # get current ihs
     obser_ihs = GetScannerIHS(sett.__gServicePort).dict_data
     expected_ihs = {'Application_ROM_ID': dict_sw_infor[SWInfor.Application_ROM_ID],
                     'Revision_ECLevel': dict_sw_infor[SWInfor.Revision_ECLevel],
@@ -18,8 +23,7 @@ def verify_iden():
                     'Serial_Number': sett.__gbefore_scanner_ihs['Serial_Number'],
                     'Model_Number': sett.__gbefore_scanner_ihs['Model_Number'],
                     'Main_Board_Serial_Number': sett.__gbefore_scanner_ihs['Main_Board_Serial_Number']}
-    # add expected into dict, obser into dict, compare
-    # build, eclevel, cfg name,
+    # get current statistics
     obser_dict_stat = service_port.get_enhanced_statistics(sett.__gServicePort)
     expected_dict_stat = {'Power On Time': '',
                           'Custom Data': '',
@@ -55,6 +59,6 @@ def compare_data(expected, obser):
     return False if expected != obser else True
 
 
-def read_sw_infor():
+def read_sw_infor(product_name):
     with open(PathFiles.path_sw_release) as json_file:
         return json.load(json_file)

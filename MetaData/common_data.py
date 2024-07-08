@@ -167,6 +167,7 @@ class SPCommand:
     sp_read_cfg = "0011"
 
     # CONFIG TAG =======
+    cfg_config_file_id = "0060"
     cfg_erase_ule = "7FF800000000"
     cfg_erase_customdata = "7FF700000000"
     cfg_ule = "7FF8"
@@ -180,6 +181,9 @@ class SPCommand:
     cfg_databits = "009B"
     #   00=one, 01=two
     cfg_stopbits = "0022"
+
+    # VALUE DEFAULT
+    val_config_file_id = "2A2A4E4F54205345542A"
 
 
 class SWInfor:

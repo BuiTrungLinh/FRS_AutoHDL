@@ -71,7 +71,7 @@ def execute_before_hdl(interface_name):
     # erase overide file
     GVar.gSERVICE_PORT.send_command(SpCMD.sp_erase_custom_file)
     # update config name
-    # Todo
+    GVar.gSERVICE_PORT.send_command(SpCMD.sp_write_cfg + SpCMD.cfg_config_file_id + SpCMD.val_config_file_id)
     # erase .wav file
     serviceport.erase_sound_file()
     # save and reset
