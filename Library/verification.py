@@ -16,15 +16,15 @@ def verify_iden(product_name):
     obser_cfg_id = gvar.gSERVICE_PORT.send_command(sp_cmd.sp_read_cfg + sp_cmd.cfg_config_file_id)
     dict_sw_infor = read_sw_infor(product_name)
     # get current ihs
-    obser_ihs = GetScannerIHS(sett.__gServicePort).dict_data
+    obser_ihs = GetScannerIHS(gvar.gSERVICE_PORT).dict_data
     expected_ihs = {'Application_ROM_ID': dict_sw_infor[SWInfor.Application_ROM_ID],
                     'Revision_ECLevel': dict_sw_infor[SWInfor.Revision_ECLevel],
-                    'Configuration_ID': sett.__gbefore_scanner_ihs['Configuration_ID'],
-                    'Serial_Number': sett.__gbefore_scanner_ihs['Serial_Number'],
-                    'Model_Number': sett.__gbefore_scanner_ihs['Model_Number'],
-                    'Main_Board_Serial_Number': sett.__gbefore_scanner_ihs['Main_Board_Serial_Number']}
+                    'Configuration_ID': gvar.gBEFORE_SCANNER_IHS['Configuration_ID'],
+                    'Serial_Number': gvar.gBEFORE_SCANNER_IHS['Serial_Number'],
+                    'Model_Number': gvar.gBEFORE_SCANNER_IHS['Model_Number'],
+                    'Main_Board_Serial_Number': gvar.gBEFORE_SCANNER_IHS['Main_Board_Serial_Number']}
     # get current statistics
-    obser_dict_stat = service_port.get_enhanced_statistics(sett.__gServicePort)
+    obser_dict_stat = service_port.get_enhanced_statistics(gvar.gSERVICE_PORT)
     expected_dict_stat = {'Power On Time': '',
                           'Custom Data': '',
                           '': ''}
