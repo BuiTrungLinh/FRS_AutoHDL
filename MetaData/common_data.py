@@ -147,7 +147,7 @@ class PathFiles:
     # path_file_dlrmus = r'..\Tools\DLRMUs\dlrmus.exe'
     path_file_dlrmus = r'D:\1.DevelopmentTool\PycharmProjects\FRS_AutoHDL\Tools\DLRMUs\dlrmus.exe'
     path_sw_release = r'MetaData/software_release.json'
-    path_sw_infor = r'MetaData/software_information.json'
+    path_sw_infor = r'../MetaData/software_information.json'
 
 
 class SPCommand:
@@ -172,6 +172,7 @@ class SPCommand:
     cfg_erase_customdata = "7FF700000000"
     cfg_ule = "7FF8"
     cfg_customdata = "7FF7"
+    cfg_mcf_version = '0009'
     cfg_interface = "0001"
     # 	00=None, 01=Even, 02=Odd
     cfg_parity = "001F"
@@ -189,7 +190,10 @@ class SPCommand:
 class SWInfor:
     Application_ROM_ID = 'App'
     Revision_ECLevel = 'EC'
-    Configuration_ID = 'Cfg'
+    Formatter_Version = 'Formatter'
+    VL_Version = 'EVL'
+    MCF_Version = 'MCF'
+    FPGA_Version_ID = 'XBurst0'
 
 
 class Identification:
@@ -277,6 +281,7 @@ class Message:
     Error_No_Selected_UpdateType = 'Please select at least 1 update-type!'
     Error_No_Selected_Release = 'Please select at least 1 release!'
     Error_No_Located_Path = 'Please enter the path containing release!'
+    Error_No_Data_In_SW_Information_Js = 'No found build {} in Software Information Json file!'
     # Notification
     Noti_Verify_Cfg = '----------------Start Verifying Config Valueset----------------'
     Noti_Verify_Iden = '----------------Start Verifying Identification----------------'
@@ -291,6 +296,38 @@ class Message:
 
 
 class Product:
+    Product = {
+        'Curie': {
+            'Product_FullName': 'Curie',
+            'Product_Name': '900i',
+            'Product_ID': '1605',
+            'Interface': {
+                1: {
+                    "name": "RS232-STD",
+                    "index": "1"
+                },
+                2: {
+                    "name": "RS232-WN",
+                    "index": "2"
+                },
+                3: {
+                    "name": "USB-COM",
+                    "index": "3"
+                },
+                4: {
+                    "name": "USB-OEM",
+                    "index": "4"
+                },
+                5: {
+                    "name": "USB-KBD",
+                    "index": "5"
+                }
+            }
+        },
+        'Apollo': {},
+        'Fresco': {},
+    }
+
     Apollo_index = 0
     Curie_index = 1
     Fresco_index = 2

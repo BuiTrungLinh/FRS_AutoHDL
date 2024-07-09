@@ -14,7 +14,7 @@ ${VAR_INTERFACE}    USB-OEM
 MT_FU_HDL-USBOEM
     [Documentation]    Running HDL USBOEM
 #    load scanner to "build_from" by ServicePort
-    Load Build To Scanner By SP    DR9401648    ${VAR_PATH_RELEASE}
+#    Load Build To Scanner By SP    DR9401648    ${VAR_PATH_RELEASE}
 #    prepare something before running HDL
     Setup Before HostDownload   ${VAR_INTERFACE}
 #    execute HDL

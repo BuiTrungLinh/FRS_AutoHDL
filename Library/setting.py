@@ -56,7 +56,7 @@ def execute_before_hdl(interface_name):
     # setting baudrate, databits, stopbits, parity for scanner, prepare before updating by host
     interface = 1
     for ifs in comdata.Interface.dict_interface:
-        if interface_name.replace('-', '').replace(' ', '').upper() == ifs['name']:
+        if interface_name.replace('-', '').replace(' ', '').upper() == comdata.Interface.dict_interface[ifs]['name']:
             interface = ifs
     serviceport.set_interface(GVar.gSERVICE_PORT, interface)
     # Update current_host_name, current_sp_name, sp if current IFs != previous IFs

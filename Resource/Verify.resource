@@ -6,4 +6,6 @@ Library    ../Library/verification.py
 *** Keywords ***
 Verify HDL
     [Arguments]
-    Log    message
+    FOR    ${item1}    IN    @{li}
+        List Should Contain Value  ${lj}  ${item1}
+    END

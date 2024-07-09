@@ -83,7 +83,7 @@ class GetScannerIHS:
         healthStr = ''
         statisticsStr = ''
         tmp_combine = idenStr + healthStr + statisticsStr
-        infor_list = tmp_combine.replace('\\x03', '').split('\\x02')
+        infor_list = tmp_combine[10:-9].split('\\x03\\x02')
         self.dict_data = {}
         for data in infor_list:
             match data[0]:
@@ -141,6 +141,9 @@ class GetScannerIHS:
                 case comdata.Identification.Interface_Bootloader_ROM_ID:
                     self.Interface_Bootloader_ROM_ID = data[1:]
                     self.dict_data['Interface_Bootloader_ROM_ID'] = data[1:]
+        self.dict_data['MCF_Version'] = sp.send_command(comdata.SPCommand.sp_read_cfg
+                                                        + comdata.SPCommand.cfg_mcf_version).decode("utf-8")
+        self.dict_data['Current_HW_ID'] = sp.send_command(comdata.SPCommand.sp_get_hwid).hex()
 
 
 def get_enhanced_statistics(sp):
