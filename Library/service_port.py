@@ -1,4 +1,5 @@
 from MetaData import common_data as comdata
+from MetaData.common_data import GlobalVar as gvar
 import time
 
 
@@ -141,23 +142,41 @@ class GetScannerIHS:
                 case comdata.Identification.Interface_Bootloader_ROM_ID:
                     self.Interface_Bootloader_ROM_ID = data[1:]
                     self.dict_data['Interface_Bootloader_ROM_ID'] = data[1:]
+                case comdata.Identification.Formatter_Version:
+                    self.Formatter_Version = data[1:]
+                    self.dict_data['Formatter_Version'] = data[1:]
         self.dict_data['MCF_Version'] = sp.send_command(comdata.SPCommand.sp_read_cfg
                                                         + comdata.SPCommand.cfg_mcf_version).decode("utf-8")
         self.dict_data['Current_HW_ID'] = sp.send_command(comdata.SPCommand.sp_get_hwid).hex()
 
 
-def get_enhanced_statistics(sp):
+def get_enhanced_statistics():
     # 0x01<index:2> - read the statistics information for statistics specified by index returning:
     # <index:2><id:2><value:4><null terminated string descriptor if available>
-    total_number = int.from_bytes(sp.send_command(comdata.SPCommand.sp_get_statistics_enhanced_number), "big")
+    total_number = int.from_bytes(gvar.gSERVICE_PORT.send_command(comdata.SPCommand.sp_get_statistics_enhanced_number), "big")
     dict_stat = {}
     for index in range(total_number - 1):
         str_index = str(hex(index).split('x')[-1])
         value = ('0' * (4 - len(str_index))) + str_index
-        stat = sp.send_command(comdata.SPCommand.sp_get_statistics_enhanced_index + value)
+        stat = gvar.gSERVICE_PORT.send_command(comdata.SPCommand.sp_get_statistics_enhanced_index + value)
+        if 'Linux Application' in stat[8:-1].decode("utf-8"):
+            continue
         dict_stat[index] = {'id': int.from_bytes(stat[2:4], "big"), 'value': int.from_bytes(stat[4:8], "big"),
                             'des': stat[8:-1].decode("utf-8")}
     return dict_stat
+
+
+def get_event_log():
+    # 022C: 	Get Event Log Entry N Enhanced Translated
+    value = 0
+    dict_event = {}
+    while True:
+        event_raw = gvar.gSERVICE_PORT.send_command(comdata.SPCommand.sp_get_event_log + f'{value:02}').decode("utf-8")
+        if event_raw == "\x00":
+            break
+        dict_event[value] = event_raw
+        value = value + 1
+    return dict_event
 
 
 def erase_sound_file():

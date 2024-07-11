@@ -5,11 +5,9 @@ sys.path.insert(0, r'..\..\FRS_AutoHDL')
 from MetaData import common_data as comdata
 import Library.setting as sett
 import Library.dlrmus as dlrmus
-import Library.verification as ver
 
 
 def by_host(interface, file_type, build, path_release_root):
-    ver.verify_iden()
     # Conversion Interface
     interface = interface.replace('-', '').replace(' ', '').upper()
     interface_index = 0

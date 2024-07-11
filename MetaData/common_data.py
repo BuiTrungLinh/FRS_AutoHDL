@@ -165,6 +165,7 @@ class SPCommand:
     sp_erase_custom_file = "1520"
     sp_write_cfg = "0010"
     sp_read_cfg = "0011"
+    sp_get_event_log = "022C"
 
     # CONFIG TAG =======
     cfg_config_file_id = "0060"
@@ -184,7 +185,7 @@ class SPCommand:
     cfg_stopbits = "0022"
 
     # VALUE DEFAULT
-    val_config_file_id = "2A2A4E4F54205345542A"
+    val_config_file_id = "20202020202020202020"
 
 
 class SWInfor:
@@ -215,6 +216,7 @@ class Identification:
     EAS_Version = "E"
     Interface_Application_ROM_ID = "U"
     Interface_Bootloader_ROM_ID = "u"
+    Formatter_Version = "t"
 
 
 class Health:
@@ -267,10 +269,27 @@ class Statistics:
     l_DWM_IPE_forced_resets = "DWM_IPE_forced_resets"
     l_Vertical_IPE_excessive_resets = "Vertical_IPE_excessive_resets"
     l_Horizontal_IPE_excessive_resets = "Horizontal_IPE_excessive_resets"
-    l_DWM_IPE_excessive_resets = "d"
-    l_Scale_sentry_activations = "S"
-    l_POS_initiated_zero_requests = "Z"
-    l_Enforced_zero_events = "X"
+    l_DWM_IPE_excessive_resets = "DWM_IPE_excessive_resets"
+    l_Scale_sentry_activations = "Scale_sentry_activations"
+    l_POS_initiated_zero_requests = "POS_initiated_zero_requests"
+    l_Enforced_zero_events = "Enforced_zero_events"
+
+
+class Event_Log:
+    s_Event = "Event"
+    s_Module_Number = "M"
+    s_Error_Code = "F"
+    s_Error_Data = "D"
+    s_Additional_Error_data = "A"
+    s_Hour = "H"
+    s_Count = "count"
+    # Expected Event Log
+    expected_hdl_event = ['SOFTWARE_UPDATE_STARTED', 'SOFTWARE_UPDATE_COMPLETE', 'SERVICEPORT_RESET', 'UNSOLICITED_STARTUP_REQ']
+    expected_hdl_usboem_event = ['USIF_HOSTDOWNLOAD_HOST_RESET']
+    # Separate events on different products
+    FR_add_expected_hdl_event = []
+    CE_add_expected_hdl_event = []
+    AP_add_expected_hdl_event = []
 
 
 class Message:

@@ -3,6 +3,7 @@ from robot.libraries.BuiltIn import BuiltIn
 import Library.service_port as serviceport
 import Library.connection as con
 import MetaData.common_data as comdata
+from Library import verification
 from MetaData.common_data import GlobalVar as GVar
 from MetaData.common_data import SPCommand as SpCMD
 
@@ -27,7 +28,8 @@ def execute_teardown():
     GVar.gSERVICE_PORT.send_command(SpCMD.sp_write_cfg + SpCMD.cfg_erase_customdata)
     # erase overide file
     GVar.gSERVICE_PORT.send_command(SpCMD.sp_erase_custom_file)
-    # update config name
+    # Erase config name
+    GVar.gSERVICE_PORT.send_command(SpCMD.sp_write_cfg + SpCMD.cfg_config_file_id + SpCMD.val_config_file_id)
     # Todo
     # erase .wav file
     serviceport.erase_sound_file()
@@ -77,11 +79,11 @@ def execute_before_hdl(interface_name):
     # save and reset
     GVar.gSERVICE_PORT.send_command(SpCMD.sp_save)
     GVar.gSERVICE_PORT.send_command(SpCMD.sp_reset)
-    time.sleep(5)
+    time.sleep(7)
     # get ihs before to running HDL
     GVar.gBEFORE_SCANNER_IHS = serviceport.GetScannerIHS(GVar.gSERVICE_PORT).dict_data
     # get statistics before to running HDL
-    GVar.gBEFORE_STATISTICS_ENHANCED = serviceport.get_enhanced_statistics(GVar.gSERVICE_PORT)
+    GVar.gBEFORE_STATISTICS_ENHANCED = serviceport.get_enhanced_statistics()
 
 
 def print_message_to_console(msg=''):
