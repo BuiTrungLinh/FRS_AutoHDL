@@ -79,7 +79,7 @@ def get_obser_eventlog():
             'Raw_Event': dict_raw_event[evt_index]
         }
         dict_event_parse[evt_index] = tmp_event
-    return {'aaa': 'bbbb', 'cccc': 'ddddd'}
+    return dict_event_parse
 
 
 def get_expected_eventlog():
