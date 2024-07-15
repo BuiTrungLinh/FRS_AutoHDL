@@ -308,18 +308,17 @@ def get_ports_list():
         # print('hwid: {}, desc: {}, name: {}'.format(port.hwid, port.description, port.name))
         # 1529 = 05F9 (DEC to HEX)
         if port.vid == int('05F9', 16):
-            if isFoundSP is False:
-                # sending ihs to scanner, make sure selected port is SP
-                con = Connection(port=port.name)
-                try:
-                    con.open_port()
-                    con.send_command(command=spcmd.sp_get_identification)
-                    current_sp_name = port.name
-                    isFoundSP = True
-                    con.close_port()
-                except:
-                    # con.close_port()
-                    current_host_name = port.name
+            # sending ihs to scanner, make sure selected port is SP
+            con = Connection(port=port.name)
+            try:
+                con.open_port()
+                con.send_command(command=spcmd.sp_get_identification)
+                current_sp_name = port.name
+                isFoundSP = True
+                con.close_port()
+            except:
+                # con.close_port()
+                current_host_name = port.name
 
             # 16384 = 4000 (DEC to HEX)
             if port.pid == int('4000', 16):

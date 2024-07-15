@@ -2,6 +2,8 @@
 Library    ../Library/verification.py
 Library    Collections
 Library    String
+Library    XML
+Library    OperatingSystem
 
 *** Variables ***
 
@@ -15,7 +17,6 @@ Verify HDL
     ...    ELSE   Verify AppOnly
 
 Verify AppOnly
-    Log    ========== Verify App-Only
 #    Verify IHS
     Verify Event Log
 
@@ -39,15 +40,18 @@ Verify IHS
 
 Verify Event Log
     Log    ======= Verify Event Log
+    ${count_passed}=     Set Variable    0
     ${VAR_ERROR_CODE}=  Set Variable   Error_Code
-    ${VAR_RESULT}=  Set Variable    ${False}
-
     &{DICT_OBSER_LOG}   get_obser_eventlog
     @{LIST_EXPECTED_LOG}    get_expected_eventlog
     FOR    ${EXP_EVT}    IN    @{LIST_EXPECTED_LOG}
         FOR    ${OBSER_EVT}    IN    @{DICT_OBSER_LOG.keys()}
-            Run Keyword If    "${EXP_EVT}" in "${DICT_OBSER_LOG[${OBSER_EVT}]["${VAR_ERROR_CODE}"]}"
-            ...  pass execution  "${EXP_EVT}" is existed
-            fail  "${EXP_EVT}" is not existed
+            ${var_passed}=  Run Keyword And Return Status    Should Be Equal    "${EXP_EVT}"    "${DICT_OBSER_LOG[${OBSER_EVT}]["${VAR_ERROR_CODE}"]}"
+            IF    ${var_passed}
+                 ${count_passed}=   Evaluate   ${count_passed}+1
+            END
         END
     END
+#
+    ${count_evt_exp}=    Get Length    ${LIST_EXPECTED_LOG}
+    Should Be Equal As Numbers    ${count_evt_exp}    ${count_passed}   Total number of log events(expected - obser)

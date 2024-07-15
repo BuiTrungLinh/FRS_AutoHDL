@@ -16,7 +16,7 @@ MT_FU_HDL-USBCOM
 #    load scanner to "build_from" by ServicePort
 #    Load Build To Scanner By SP    DR9401648    ${VAR_PATH_RELEASE}
 #    prepare something before running HDL
-    Setup Before HostDownload   ${VAR_INTERFACE}
+#    Setup Before HostDownload   ${VAR_INTERFACE}
 #    execute HDL
 #    Load Build To Scanner By Host   ${VAR_INTERFACE}    AppOnly     DR9401657       ${VAR_PATH_RELEASE}
 #    verify HDL

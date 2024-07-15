@@ -3,7 +3,6 @@ from robot.libraries.BuiltIn import BuiltIn
 import Library.service_port as serviceport
 import Library.connection as con
 import MetaData.common_data as comdata
-from Library import verification
 from MetaData.common_data import GlobalVar as GVar
 from MetaData.common_data import SPCommand as SpCMD
 
