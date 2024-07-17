@@ -13,16 +13,16 @@ def by_host(interface, file_type, build, path_release_root):
     interface_index = 0
     interface_name = ''
     for ifs in comdata.Interface.dict_interface:
-        if interface == ifs['name'].upper():
+        if interface == comdata.Interface.dict_interface[ifs]['name'].upper():
             interface_index = ifs
-            interface_name = ifs['full_name']
+            interface_name = comdata.Interface.dict_interface[ifs]['full_name']
             break
     # Conversion File Type
     file_type = file_type.replace('-', '').replace(' ', '').upper()
     file_type_name = ''
     for ft in comdata.FileType.dict_filetype:
-        if file_type == ft['name'].upper():
-            file_type_name = ft['name']
+        if file_type == comdata.FileType.dict_filetype[ft]['name'].upper():
+            file_type_name = comdata.FileType.dict_filetype[ft]['name']
             break
     file_format = '.DAT' if comdata.Interface.usboem_index == interface_index else '.S37'
     path_file = path_release_root + '\\' + build + '\\' + file_type_name + '_' + build + file_format
