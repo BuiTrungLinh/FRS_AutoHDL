@@ -28,30 +28,13 @@ def by_host(interface, file_type, build, path_release_root):
     path_file = path_release_root + '\\' + build + '\\' + file_type_name + '_' + build + file_format
     # check pathfile is not existed
     if not os.path.isfile(path_file):
-        sett.print_message_to_console('Did not found file: {} !!!'.format(path_file))
-        # Todo
-        # Do somthing here when loading by host fail: skip testcase or rerun it
-        return
-    dlr = dlrmus.Dlrmus(to_build=path_file, interface=interface_index).update_by_host()
-    if dlr:
-        sett.print_message_to_console(comdata.Message.Succ_Dlrmus_Update_Host.format(build, interface_name))
-    else:
-        sett.print_message_to_console(comdata.Message.Error_Dlrmus_Update_Host.format(build, interface_name))
-        # Todo
-        # Do somthing here when loading by host fail: skip testcase or rerun it
+        return [False, 'Did not found file: {} !!!'.format(path_file)]
+    dlrmus.Dlrmus(to_build=path_file, interface=interface_index).update_by_host()
+    return [True, '']
 
 
 def by_sp(build, path_release_root):
     path_file = path_release_root + '\\' + build + '\\AppOnly_' + build + '.S37'
     if not os.path.isfile(path_file):
-        sett.print_message_to_console('Did not found file: {} !!!'.format(path_file))
-        # Todo
-        # Do somthing here when loading by SP fail: skip testcase or rerun it
-        return
-    dlr = dlrmus.Dlrmus(from_build=path_file).update_by_sp()
-    if dlr:
-        sett.print_message_to_console(comdata.Message.Succ_Dlrmus_Update_SP.format(build))
-    else:
-        sett.print_message_to_console(comdata.Message.Error_Dlrmus_Update_SP.format(build))
-        # Todo
-        # Do somthing here when loading by SP fail: skip testcase or rerun it
+        return [False, 'Did not found file: {} !!!'.format(path_file)]
+    return dlrmus.Dlrmus(from_build=path_file).update_by_sp()

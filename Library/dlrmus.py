@@ -53,13 +53,12 @@ class Dlrmus:
                            + set_baudrate
                            + comdata.Dlrmus.p_select_path_file + ' '
                            + self.to_build)
-        sett.print_message_to_console('Host: Update scanner to build "{}" via host.'.format(self.to_build))
         sett.print_message_to_console(cmd_dlrmus_host)
         subprocess.run(cmd_dlrmus_host)
-        # check build is load done
-        # Code something here ...s
-        # check current status of DLRMUS, if 100%, copy log, verify scanner
-        return True
+        sett.print_message_to_console(comdata.Message.Done_Dlrmus_Update_Host.format(self.to_build))
+        # After running, copy log to folder log, change name
+        # Code something here ... Todo
+
 
     def update_by_sp(self):
         cmd_dlrmus_sp = (self.path_file_dlrmus + ' '
@@ -75,5 +74,8 @@ class Dlrmus:
         time.sleep(5)
         self.sp.open_port()
         # check build is load done
-        # Code something here ...s
-        return True
+        obser_build = serviceport.GetScannerIHS(self.sp).dict_data[comdata.Identification.l_Application_ROM_ID]
+        exp_build = self.from_build.split(r'\\')[-1].split('_')[-1][:-4]
+        if obser_build != exp_build:
+            return [False, comdata.Message.Succ_Dlrmus_Update_SP.format(exp_build)]
+        return [True, comdata.Message.Error_Dlrmus_Update_SP.format(exp_build)]

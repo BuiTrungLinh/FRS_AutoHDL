@@ -144,8 +144,8 @@ class Dlrmus:
 
 
 class PathFiles:
-    # path_file_dlrmus = r'..\Tools\DLRMUs\dlrmus.exe'
-    path_file_dlrmus = r'D:\1.DevelopmentTool\PycharmProjects\FRS_AutoHDL\Tools\DLRMUs\dlrmus.exe'
+    path_file_dlrmus = r'..\Tools\DLRMUs\dlrmus.exe'
+    # path_file_dlrmus = r'D:\1.DevelopmentTool\PycharmProjects\FRS_AutoHDL\Tools\DLRMUs\dlrmus.exe'
     path_sw_release = r'MetaData/software_release.json'
     path_sw_infor = r'../MetaData/software_information.json'
 
@@ -218,6 +218,9 @@ class Identification:
     Interface_Bootloader_ROM_ID = "u"
     Formatter_Version = "t"
 
+    l_Application_ROM_ID = "Application_ROM_ID"
+    l_Revision_ECLevel = "Revision_ECLevel"
+    l_Configuration_ID = "Configuration_ID"
 
 class Health:
     Internal_Scale_Status = "s"
@@ -309,9 +312,8 @@ class Message:
     Noti_Verify_Wav = '----------------Start Verifying WAV-file----------------'
     # Dlrmus
     Succ_Dlrmus_Update_SP = 'Updated {} build to the scanner by ServicePort successfully'
-    Succ_Dlrmus_Update_Host = 'Updated {} build to the scanner by Host {} successfully'
     Error_Dlrmus_Update_SP = 'ERR: Failed update of {} build for scanner through ServicePort'
-    Error_Dlrmus_Update_Host = 'ERR: Failed update of {} build for scanner through Host {}'
+    Done_Dlrmus_Update_Host = 'Updated {} build to the scanner by Host - Done.'
 
 
 class Product:
