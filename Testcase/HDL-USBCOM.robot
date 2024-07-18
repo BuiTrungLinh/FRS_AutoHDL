@@ -2,22 +2,21 @@
 Resource    ../Resource/ExecuteHDL.resource
 Resource    ../Resource/Verify.resource
 Resource    ../Resource/Setting.resource
+Resource    ../Resource/Variable.resource
 Test Teardown    Teardown
-Variables    ../MetaData/common_data.py
-Test Setup       Setup      900i
+Test Setup       Setup      ${PID_CE}
 
 *** Variables ***
-${VAR_PATH_RELEASE}    D:${/}tmp${/}CE_Release
-${VAR_INTERFACE}    USB-COM
+
 
 *** Test Cases ***
 AT_HDL-USBCOM-AppOnly-Upgrade-DR9401646_To_DR9401648
     [Documentation]    Running HDL USBOEM
 #    load scanner to "build_from" by ServicePort
-#    Load Build To Scanner By SP    DR9401646    ${VAR_PATH_RELEASE}
+    Load Build To Scanner By SP    DR9401646
 #    prepare something before running HDL
-    Setup Before HostDownload   ${VAR_INTERFACE}
+    Setup Before HostDownload   ${INTERFACE_USBCOM}
 #    execute HDL
-    Load Build To Scanner By Host   ${VAR_INTERFACE}    AppOnly     DR9401648       ${VAR_PATH_RELEASE}
+    Load Build To Scanner By Host   ${INTERFACE_USBCOM}    ${FILETYPE_APPONLY}     DR9401648
 #    verify HDL
-#    Verify HDL    "AppOnly"
+    Verify HDL    ${FILETYPE_APPONLY}     DR9401648

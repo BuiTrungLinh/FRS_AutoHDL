@@ -35,12 +35,11 @@ def get_obser_ihs():
     return obser_ihs
 
 
-def get_expected_ihs():
+def get_expected_ihs(exp_build):
     expected_ihs = {}
     # === EXPECTED IHS
     # get software infor
-    current_build = GetScannerIHS(gvar.gSERVICE_PORT).Application_ROM_ID
-    dict_sw_infor = read_sw_infor(current_build)
+    dict_sw_infor = read_sw_infor(exp_build)
     expected_i = {'Application_ROM_ID': dict_sw_infor[SWInfor.Application_ROM_ID],
                   'Revision_ECLevel': dict_sw_infor[SWInfor.Revision_ECLevel],
                   'Formatter_Version': dict_sw_infor[SWInfor.Formatter_Version],

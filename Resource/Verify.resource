@@ -10,7 +10,8 @@ Library    OperatingSystem
 *** Keywords ***
 Verify HDL
     Log    <======= VERIFY HOST DOWNLOAD =======>
-    [Arguments]     ${FILE_TYPE}
+    [Arguments]     ${FILE_TYPE}    ${BUILD}
+    Set Global Variable    ${EXPECTED_BUILD}    ${BUILD}
     Run Keyword if   ${FILE_TYPE}.upper() == "APPONLY"   Verify AppOnly
     ...    ELSE   Run Keyword if   ${FILE_TYPE} == "APPCONFIG"     Verify AppCfg
     ...    ELSE   Run Keyword if   ${FILE_TYPE} == "CFGONLY"     Verify CfgOnly
@@ -37,8 +38,8 @@ Verify OtherCfg
 Verify IHS
     Log    ======= Verify I-H-S =======
     ${OBSER_IHS}    get_obser_ihs
-    ${EXPECTED_IHS}     get_expected_ihs
-    Dictionaries Should Be Equal    ${OBSER_IHS}    ${EXPECTED_IHS}
+    ${EXPECTED_IHS}     get_expected_ihs    ${EXPECTED_BUILD}
+    Run Keyword And Continue On Failure    Dictionaries Should Be Equal    ${OBSER_IHS}    ${EXPECTED_IHS}
     Log    ======= END - Verify I-H-S =======
 
 Verify Event Log

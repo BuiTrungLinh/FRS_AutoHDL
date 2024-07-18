@@ -77,5 +77,5 @@ class Dlrmus:
         obser_build = serviceport.GetScannerIHS(self.sp).dict_data[comdata.Identification.l_Application_ROM_ID]
         exp_build = self.from_build.split(r'\\')[-1].split('_')[-1][:-4]
         if obser_build != exp_build:
-            return [False, comdata.Message.Succ_Dlrmus_Update_SP.format(exp_build)]
-        return [True, comdata.Message.Error_Dlrmus_Update_SP.format(exp_build)]
+            return [False, comdata.Message.Error_Dlrmus_Update_SP.format(exp_build)]
+        return [True, comdata.Message.Succ_Dlrmus_Update_SP.format(exp_build)]
