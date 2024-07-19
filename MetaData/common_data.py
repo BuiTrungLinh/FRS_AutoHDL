@@ -166,6 +166,7 @@ class SPCommand:
     sp_write_cfg = "0010"
     sp_read_cfg = "0011"
     sp_get_event_log = "022C"
+    sp_get_internal_file = '02A3'
 
     # CONFIG TAG =======
     cfg_config_file_id = "0060"
