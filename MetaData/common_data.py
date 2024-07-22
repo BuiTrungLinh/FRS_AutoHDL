@@ -131,7 +131,7 @@ class Dlrmus:
     i_RS232_STD = "RS232Scanner"
     i_RS232_WN = "RS232Scanner"
     i_RS232_SC = "SCRS232Scanner"
-    i_USBCOM = "RS232Scanner"
+    i_USBCOM = "RS232Imager"
     i_USBCOM_SC = "SC-COM"
     i_USBOEM = "USBScanner"
     i_ServicePort = "ServicePort"

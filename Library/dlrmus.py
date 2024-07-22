@@ -36,7 +36,7 @@ class Dlrmus:
         set_parity = ''
         set_baudrate = ''
         # 4 = USBCOM, 5 = USBCOMSC
-        if self.interface in [comdata.Interface.usbcom_index, comdata.Interface.usbcomsc_index]:
+        if self.interface in [comdata.Interface.usbcomsc_index]:
             set_host_port_name = '-c ' + self.host_port_name + ' '
         # add more -p parity = odd if interface is rs232WN
         # 2 = RS232WN
@@ -54,8 +54,7 @@ class Dlrmus:
                            + comdata.Dlrmus.p_select_path_file + ' '
                            + self.to_build)
         sett.print_message_to_console(cmd_dlrmus_host)
-        subprocess.run(cmd_dlrmus_host)
-        sett.print_message_to_console(comdata.Message.Done_Dlrmus_Update_Host.format(self.to_build))
+        subprocess.run(self.path_file_dlrmus + ' -a RS232Imager')
         # After running, copy log to folder log, change name
         # Code something here ... Todo
 

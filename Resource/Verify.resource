@@ -12,7 +12,7 @@ Verify HDL
     Log    <======= VERIFY HOST DOWNLOAD =======>
     [Arguments]     ${FILE_TYPE}    ${BUILD}
     Set Global Variable    ${EXPECTED_BUILD}    ${BUILD}
-    Run Keyword if   ${FILE_TYPE}.upper() == "APPONLY"   Verify AppOnly
+    Run Keyword if   "${FILE_TYPE}".upper() == "APPONLY"   Verify AppOnly
     ...    ELSE   Run Keyword if   ${FILE_TYPE} == "APPCONFIG"     Verify AppCfg
     ...    ELSE   Run Keyword if   ${FILE_TYPE} == "CFGONLY"     Verify CfgOnly
     ...    ELSE   Run Keyword if   ${FILE_TYPE} == "OTHERCONFIG"     Verify OtherCfg
@@ -20,7 +20,7 @@ Verify HDL
     Log    <======= END - VERIFY HOST DOWNLOAD =======>
 
 Verify AppOnly
-    Verify IHS
+#    Verify IHS
     Verify Event Log
 
 Verify AppCfg

@@ -11,11 +11,9 @@ def by_host(interface, file_type, build, path_release_root):
     # Conversion Interface
     interface = interface.replace('-', '').replace(' ', '').upper()
     interface_index = 0
-    interface_name = ''
     for ifs in comdata.Interface.dict_interface:
         if interface == comdata.Interface.dict_interface[ifs]['name'].upper():
             interface_index = ifs
-            interface_name = comdata.Interface.dict_interface[ifs]['full_name']
             break
     # Conversion File Type
     file_type = file_type.replace('-', '').replace(' ', '').upper()
@@ -30,7 +28,7 @@ def by_host(interface, file_type, build, path_release_root):
     if not os.path.isfile(path_file):
         return [False, 'Did not found file: {} !!!'.format(path_file)]
     dlrmus.Dlrmus(to_build=path_file, interface=interface_index).update_by_host()
-    return [True, '']
+    return [True, comdata.Message.Done_Dlrmus_Update_Host.format(build)]
 
 
 def by_sp(build, path_release_root):
