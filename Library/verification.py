@@ -10,6 +10,8 @@ from MetaData.common_data import PathFiles
 from MetaData.common_data import GlobalVar as gvar
 from MetaData.common_data import Product as product
 from MetaData.common_data import Event_Log as com_event
+from MetaData.common_data import ConfigName
+from MetaData.common_data import FileType
 
 
 def get_obser_ihs():
@@ -35,9 +37,13 @@ def get_obser_ihs():
     return obser_ihs
 
 
-def get_expected_ihs(exp_build):
+def get_expected_ihs(exp_build, file_type):
+    Configuration_File_ID = ''
+    for ft in FileType.dict_filetype:
+        if file_type == FileType.dict_filetype[ft]['name'].upper():
+            Configuration_File_ID = FileType.dict_filetype[ft]['name']
+            break
     expected_ihs = {}
-    # === EXPECTED IHS
     # get software infor
     dict_sw_infor = read_sw_infor(exp_build)
     expected_i = {'Application_ROM_ID': dict_sw_infor[SWInfor.Application_ROM_ID],
@@ -46,7 +52,7 @@ def get_expected_ihs(exp_build):
                   'VL_Version': dict_sw_infor[SWInfor.VL_Version],
                   'MCF_Version': dict_sw_infor[SWInfor.MCF_Version],
                   'FPGA_Version_ID': dict_sw_infor[SWInfor.FPGA_Version_ID],
-                  'Configuration_File_ID': '',
+                  'Configuration_File_ID': Configuration_File_ID,
                   'Serial_Number': gvar.gBEFORE_SCANNER_IHS['Serial_Number'],
                   'Model_Number': gvar.gBEFORE_SCANNER_IHS['Model_Number'],
                   'Main_Board_Serial_Number': gvar.gBEFORE_SCANNER_IHS['Main_Board_Serial_Number'],

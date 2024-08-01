@@ -199,6 +199,13 @@ class SWInfor:
     FPGA_Version_ID = 'XBurst0'
 
 
+class ConfigName:
+    AppOnly = 'XXXX'
+    AppCfg = 'XXXX'
+    CfgOnly = 'XXXX'
+    OtherCfg = 'XXXX'
+
+
 class Identification:
     Application_ROM_ID = "A"
     Revision_ECLevel = "R"
@@ -223,6 +230,7 @@ class Identification:
     l_Application_ROM_ID = "Application_ROM_ID"
     l_Revision_ECLevel = "Revision_ECLevel"
     l_Configuration_ID = "Configuration_ID"
+
 
 class Health:
     Internal_Scale_Status = "s"
@@ -289,7 +297,8 @@ class Event_Log:
     s_Hour = "H"
     s_Count = "count"
     # Expected Event Log
-    expected_hdl_event = ['SOFTWARE_UPDATE_STARTED', 'SOFTWARE_UPDATE_COMPLETE', 'SERVICEPORT_RESET', 'UNSOLICITED_STARTUP_REQ']
+    expected_hdl_event = ['SOFTWARE_UPDATE_STARTED', 'SOFTWARE_UPDATE_COMPLETE', 'SERVICEPORT_RESET',
+                          'UNSOLICITED_STARTUP_REQ']
     expected_hdl_usboem_event = ['USIF_HOSTDOWNLOAD_HOST_RESET']
     # Separate events on different products
     FR_add_expected_hdl_event = []

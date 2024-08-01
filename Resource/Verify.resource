@@ -12,6 +12,7 @@ Verify HDL
     Log    <======= VERIFY HOST DOWNLOAD =======>
     [Arguments]     ${FILE_TYPE}    ${BUILD}
     Set Global Variable    ${EXPECTED_BUILD}    ${BUILD}
+    Set Global Variable    ${EXPECTED_FILE_TYPE}    ${FILE_TYPE}
     Run Keyword if   "${FILE_TYPE}".upper() == "APPONLY"   Verify AppOnly
     ...    ELSE   Run Keyword if   ${FILE_TYPE} == "APPCONFIG"     Verify AppCfg
     ...    ELSE   Run Keyword if   ${FILE_TYPE} == "CFGONLY"     Verify CfgOnly
@@ -20,7 +21,7 @@ Verify HDL
     Log    <======= END - VERIFY HOST DOWNLOAD =======>
 
 Verify AppOnly
-#    Verify IHS
+    Verify IHS
     Verify Event Log
 
 Verify AppCfg
@@ -38,7 +39,7 @@ Verify OtherCfg
 Verify IHS
     Log    ======= Verify I-H-S =======
     ${OBSER_IHS}    get_obser_ihs
-    ${EXPECTED_IHS}     get_expected_ihs    ${EXPECTED_BUILD}
+    ${EXPECTED_IHS}     get_expected_ihs    ${EXPECTED_BUILD}   ${EXPECTED_FILE_TYPE}
     Run Keyword And Continue On Failure    Dictionaries Should Be Equal    ${OBSER_IHS}    ${EXPECTED_IHS}
     Log    ======= END - Verify I-H-S =======
 
@@ -57,4 +58,13 @@ Verify Event Log
         END
         Run Keyword And Continue On Failure    Should Be True   ${VAR_RESULT}   Event log: "${EXP_EVT}" is not existed
     END
+
+#    Verify the number of events
+    ${len_obser} =  Get Length    ${DICT_OBSER_LOG}
+    ${len_expected} =   Get Length    ${LIST_EXPECTED_LOG}
+    Run Keyword And Continue On Failure    Should Be Equal As Numbers    ${len_obser}   ${len_expected}     msg=The current number of events in the scanner is incorrect.
+    Log    Observation:
+    Log Dictionary    &{DICT_OBSER_LOG}
+    Log    Expected:
+    Log List    @{LIST_EXPECTED_LOG}
     Log    ======= END - Verify Event Log =======
