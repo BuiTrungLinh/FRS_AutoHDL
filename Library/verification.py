@@ -11,7 +11,7 @@ from MetaData.common_data import GlobalVar as gvar
 from MetaData.common_data import Product as product
 from MetaData.common_data import Event_Log as com_event
 from MetaData.common_data import ConfigName
-from MetaData.common_data import FileType
+from MetaData.common_data import SPCommand
 
 
 def get_obser_ihs():
@@ -39,10 +39,11 @@ def get_obser_ihs():
 
 def get_expected_ihs(exp_build, file_type):
     Configuration_File_ID = ''
-    for ft in FileType.dict_filetype:
-        if file_type == FileType.dict_filetype[ft]['name'].upper():
-            Configuration_File_ID = FileType.dict_filetype[ft]['name']
-            break
+    if file_type.upper().replace('-', '').strip() == 'APPONLY':
+        Configuration_File_ID = gvar.gBEFORE_SCANNER_IHS['Configuration_ID'],
+    else:
+        Configuration_File_ID = ConfigName.OtherCfg
+
     expected_ihs = {}
     # get software infor
     dict_sw_infor = read_sw_infor(exp_build)
@@ -99,11 +100,43 @@ def get_expected_eventlog():
     return list_expected_event
 
 
-def verify_config():
-    sett.print_message_to_console(msg.Noti_Verify_Cfg)
-    # check all changed cfgs in .text file acording to IFs current, save intto dict file
-    # check each command-value in scanner
-    return
+def get_expected_config():
+    f = open(PathFiles.path_cfgule_file, "r")
+    dict_cfg = {}
+    start_read = False
+    interface = ''
+    tmp_dict = {}
+    for line in f:
+        config_tag = line[0:4]
+        value = line.split('#')[0].strip()[4:-2]
+        # Start verify when seeing 7FFB, stop verify when seeing 7FFD
+        if config_tag == '7FFB':
+            start_read = True
+            interface = value
+            continue
+        elif config_tag == '7FFD' and interface != '':
+            start_read = False
+            dict_cfg[interface] = tmp_dict
+            tmp_dict = {}
+            interface = ''
+            continue
+        if start_read:
+            tmp_dict[config_tag] = value
+    f.close()
+    return dict_cfg
+
+
+def get_obser_config():
+    dict_obser = {}
+    exp_cfg = get_expected_config()
+    for ifs in exp_cfg:
+        tmp_dict = {}
+        gvar.gSERVICE_PORT.send_command(SPCommand.sp_write_cfg + SPCommand.cfg_interface + ifs)
+        for cfg in exp_cfg[ifs]:
+            value = gvar.gSERVICE_PORT.send_command(SPCommand.sp_read_cfg + cfg)
+            tmp_dict[cfg] = value
+        dict_obser[ifs] = tmp_dict
+    return dict_obser
 
 
 def verify_combination():

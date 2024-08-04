@@ -12,11 +12,11 @@ Verify HDL
     Log    <======= VERIFY HOST DOWNLOAD =======>
     [Arguments]     ${FILE_TYPE}    ${BUILD}
     Set Global Variable    ${EXPECTED_BUILD}    ${BUILD}
-    Set Global Variable    ${EXPECTED_FILE_TYPE}    ${FILE_TYPE}
-    Run Keyword if   "${FILE_TYPE}".upper() == "APPONLY"   Verify AppOnly
-    ...    ELSE   Run Keyword if   ${FILE_TYPE} == "APPCONFIG"     Verify AppCfg
-    ...    ELSE   Run Keyword if   ${FILE_TYPE} == "CFGONLY"     Verify CfgOnly
-    ...    ELSE   Run Keyword if   ${FILE_TYPE} == "OTHERCONFIG"     Verify OtherCfg
+    Set Global Variable    ${EXPECTED_FILE_TYPE}    "${FILE_TYPE}".upper()
+    Run Keyword if   ${EXPECTED_FILE_TYPE} == "APPONLY"   Verify AppOnly
+    ...    ELSE   Run Keyword if   ${EXPECTED_FILE_TYPE} == "APPCONFIG"     Verify AppCfg
+    ...    ELSE   Run Keyword if   ${EXPECTED_FILE_TYPE} == "CFGONLY"     Verify CfgOnly
+    ...    ELSE   Run Keyword if   ${EXPECTED_FILE_TYPE} == "OTHERCONFIG"     Verify OtherCfg
     ...    ELSE   Verify AppOnly
     Log    <======= END - VERIFY HOST DOWNLOAD =======>
 
@@ -24,23 +24,27 @@ Verify AppOnly
     Verify IHS
     Verify Event Log
 
+
 Verify AppCfg
     Verify IHS
-    Log    message
+    Verify Event Log
+    Verify Config Tag
 
 Verify CfgOnly
     Verify IHS
-    Log    message
+    Verify Event Log
+    Verify Config Tag
   
 Verify OtherCfg
     Verify IHS
-    Log    message
+    Verify Event Log
+    Verify Config Tag
 
 Verify IHS
     Log    ======= Verify I-H-S =======
     ${OBSER_IHS}    get_obser_ihs
     ${EXPECTED_IHS}     get_expected_ihs    ${EXPECTED_BUILD}   ${EXPECTED_FILE_TYPE}
-    Run Keyword And Continue On Failure    Dictionaries Should Be Equal    ${OBSER_IHS}    ${EXPECTED_IHS}
+    Run Keyword And Continue On Failure    Dictionaries Should Be Equal    ${EXPECTED_IHS}    ${OBSER_IHS}
     Log    ======= END - Verify I-H-S =======
 
 Verify Event Log
@@ -68,3 +72,10 @@ Verify Event Log
     Log    Expected:
     Log List    @{LIST_EXPECTED_LOG}
     Log    ======= END - Verify Event Log =======
+
+Verify Config Tag
+    Log    ======= Verify Config Tag =======
+    ${EXPECTED_CFG}    get_expected_config
+    ${OBSER_CFG}     get_obser_config
+    Run Keyword And Continue On Failure    Dictionaries Should Be Equal    ${EXPECTED_CFG}    ${OBSER_CFG}
+    Log    ======= END - Verify Config Tag =======

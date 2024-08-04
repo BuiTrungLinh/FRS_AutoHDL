@@ -145,9 +145,9 @@ class Dlrmus:
 
 class PathFiles:
     path_file_dlrmus = r'..\Tools\DLRMUs\dlrmus.exe'
-    # path_file_dlrmus = r'D:\1.DevelopmentTool\PycharmProjects\FRS_AutoHDL\Tools\DLRMUs\dlrmus.exe'
     path_sw_release = r'MetaData/software_release.json'
     path_sw_infor = r'../MetaData/software_information.json'
+    path_cfgule_file = r'../Files/CFGULE.tex'
 
 
 class SPCommand:
@@ -200,9 +200,7 @@ class SWInfor:
 
 
 class ConfigName:
-    AppOnly = 'XXXX'
-    AppCfg = 'XXXX'
-    CfgOnly = 'XXXX'
+    AppOnly = ''
     OtherCfg = 'XXXX'
 
 
