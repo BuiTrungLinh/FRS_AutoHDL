@@ -79,3 +79,10 @@ Verify Config Tag
     ${OBSER_CFG}     get_obser_config
     Run Keyword And Continue On Failure    Dictionaries Should Be Equal    ${EXPECTED_CFG}    ${OBSER_CFG}
     Log    ======= END - Verify Config Tag =======
+
+Verify ULE
+    Log    ======= Verify ULE =======
+    ${EXPECTED_ULE}    get_expected_ule
+    ${OBSER_ULE}     get_obser_ule
+    Run Keyword And Continue On Failure    Should Be Equal    ${EXPECTED_ULE}    ${OBSER_ULE}
+    Log    ======= END - Verify ULE =======

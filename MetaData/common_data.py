@@ -1,3 +1,8 @@
+import os
+
+ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+
+
 class GlobalVar:
     gBEFORE_SCANNER_IHS = None
     gBEFORE_STATISTICS_ENHANCED = None
@@ -144,10 +149,11 @@ class Dlrmus:
 
 
 class PathFiles:
-    path_file_dlrmus = r'..\Tools\DLRMUs\dlrmus.exe'
-    path_sw_release = r'MetaData/software_release.json'
-    path_sw_infor = r'../MetaData/software_information.json'
-    path_cfgule_file = r'../Files/CFGULE.tex'
+    path_file_dlrmus = os.path.join(ROOT_DIR, r'../Tools/DLRMUs/dlrmus.exe')
+    path_sw_release = os.path.join(ROOT_DIR, r'software_release.json')
+    path_sw_infor = os.path.join(ROOT_DIR, r'software_information.json')
+    path_cfgule_file = os.path.join(ROOT_DIR, r'../Files/ProductConfig/CFGULE.tex')
+    path_ule_file = os.path.join(ROOT_DIR, r'../Files/ProductConfig/ULE.ule')
 
 
 class SPCommand:

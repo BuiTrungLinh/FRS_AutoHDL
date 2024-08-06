@@ -139,13 +139,34 @@ def get_obser_config():
     return dict_obser
 
 
-def verify_combination():
-    sett.print_message_to_console(msg.Noti_Verify_ULE)
-    # verify .wav file, ule
+def get_expected_ule():
+    f = open(PathFiles.path_ule_file, "r")
+    str_exp_ule = f.read().strip().lower()
+    return str_exp_ule
 
-    sett.print_message_to_console(msg.Noti_Verify_Wav)
-    # verify .wav file, ule
-    return
+
+def get_obser_ule():
+    str_obser_ule = gvar.gSERVICE_PORT.send_command(SPCommand.sp_read_cfg + SPCommand.cfg_ule).strip().lower()
+    return str_obser_ule
+
+
+def get_obser_sound_file():
+    internal = gvar.gSERVICE_PORT.send_command(SPCommand.sp_get_internal_file).upper()
+    sub_string = ".WAV"
+    list_result = []
+    if internal.find(sub_string) == -1:
+        return list_result
+    start_index = 0
+    for i in range(len(internal)):
+        j = internal.find(sub_string, start_index)
+        if j != -1:
+            sub_tmp = internal[start_index:j + 4]
+            sub_sub_tmp = sub_tmp[sub_tmp.rfind('/'):].strip()
+            wav_file = sub_sub_tmp[1:].strip().upper()
+            if wav_file not in list_result:
+                list_result.append(wav_file)
+            start_index = j + 4
+    return list_result
 
 
 def read_sw_infor(build):

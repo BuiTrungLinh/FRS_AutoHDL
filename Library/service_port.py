@@ -180,10 +180,14 @@ def get_event_log():
 
 
 def erase_sound_file():
-    # Sending 02A3 to get all in internal
+    # Sending 02A3 to get all files in internal
     internal = gvar.gSERVICE_PORT.send_command(comdata.SPCommand.sp_get_internal_file).upper()
     sub_string = ".WAV"
+    # if not found any .wav file, exit
+    if internal.find(sub_string) == -1:
+        return
     start_index = 0
+    # delete each .wav file in internal
     for i in range(len(internal)):
         j = internal.find(sub_string, start_index)
         if j != -1:
@@ -194,4 +198,5 @@ def erase_sound_file():
             gvar.gSERVICE_PORT.send_command(comdata.SPCommand.sp_erase_find_internal+'"' + wav_file.upper() + '"')
             gvar.gSERVICE_PORT.send_command(comdata.SPCommand.sp_erase_find_internal + '"' + wav_file.lower() + '"')
             start_index = j + 4
-    return
+    # recheck make sure wav file is deleted
+    erase_sound_file()
