@@ -1,8 +1,15 @@
+import os
+import shutil
 import subprocess
 import time
+from datetime import datetime
+
+from robot.libraries.BuiltIn import BuiltIn
+
 import Library.service_port as serviceport
 import MetaData.common_data as comdata
 import Library.setting as sett
+from MetaData.common_data import PathFiles
 
 
 class Dlrmus:
@@ -43,7 +50,8 @@ class Dlrmus:
         if self.interface in [comdata.Interface.rs232wn_index]:
             set_parity = '-p o '
         # 6 = usboem, 4 = usbcom, 5 = USBCOMSC
-        if self.interface not in [comdata.Interface.usboem_index, comdata.Interface.usbcom_index, comdata.Interface.usbcomsc_index]:
+        if self.interface not in [comdata.Interface.usboem_index, comdata.Interface.usbcom_index,
+                                  comdata.Interface.usbcomsc_index]:
             set_baudrate = comdata.Dlrmus.p_start_baudrate + ' ' + comdata.Dlrmus.v_baudrate_115200 + ' '
         cmd_dlrmus_host = (self.path_file_dlrmus + ' '
                            + comdata.Dlrmus.p_select_interface + ' '
@@ -55,9 +63,8 @@ class Dlrmus:
                            + self.to_build)
         sett.print_message_to_console(cmd_dlrmus_host)
         subprocess.run(self.path_file_dlrmus + ' -a RS232Imager')
-        # After running, copy log to folder log, change name
-        # Code something here ... Todo
-
+        # copy log file
+        save_log_file('log_name', 'HOST')
 
     def update_by_sp(self):
         cmd_dlrmus_sp = (self.path_file_dlrmus + ' '
@@ -71,6 +78,8 @@ class Dlrmus:
         sett.print_message_to_console(cmd_dlrmus_sp)
         subprocess.run(cmd_dlrmus_sp)
         time.sleep(5)
+        # copy log file
+        save_log_file('log_name', 'SP')
         self.sp.open_port()
         # check build is load done
         obser_build = serviceport.GetScannerIHS(self.sp).dict_data[comdata.Identification.l_Application_ROM_ID]
@@ -78,3 +87,13 @@ class Dlrmus:
         if obser_build != exp_build:
             return [False, comdata.Message.Error_Dlrmus_Update_SP.format(exp_build)]
         return [True, comdata.Message.Succ_Dlrmus_Update_SP.format(exp_build)]
+
+
+def save_log_file(log_name, method):
+    dt_string = datetime.now().strftime("%d%m%Y_%H%M%S")
+    newpath = (PathFiles.path_log_folder + BuiltIn().get_variable_value("${TEST NAME}") + '_'
+               + dt_string + r'\\' + method + '_' + log_name)
+    if not os.path.exists(newpath):
+        os.makedirs(newpath)
+    # copy files to folder log
+    shutil.copy(PathFiles.path_dlrmus_log_folder + log_name, newpath)
