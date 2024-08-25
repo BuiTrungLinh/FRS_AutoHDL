@@ -62,9 +62,9 @@ class Dlrmus:
                            + comdata.Dlrmus.p_select_path_file + ' '
                            + self.to_build)
         sett.print_message_to_console(cmd_dlrmus_host)
-        subprocess.run(self.path_file_dlrmus + ' -a RS232Imager')
+        subprocess.run(cmd_dlrmus_host)
         # copy log file
-        save_log_file('log_name', 'HOST')
+        # save_log_file('log_name', 'HOST')
 
     def update_by_sp(self):
         cmd_dlrmus_sp = (self.path_file_dlrmus + ' '
@@ -79,7 +79,7 @@ class Dlrmus:
         subprocess.run(cmd_dlrmus_sp)
         time.sleep(5)
         # copy log file
-        save_log_file('log_name', 'SP')
+        # save_log_file('log_name', 'SP')
         self.sp.open_port()
         # check build is load done
         obser_build = serviceport.GetScannerIHS(self.sp).dict_data[comdata.Identification.l_Application_ROM_ID]
