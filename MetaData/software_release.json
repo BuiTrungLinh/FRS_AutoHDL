@@ -30,10 +30,12 @@
 			"RC4": "DR9401638",
 			"RC5": "DR9401643",
 			"RC6": "DR9401646",
-			"RC7": "DR9401648"
+			"RC7": "DR9401648",
+			"RC9": "DR9401672",
+			"RC10": "DR9401688"
 		},
-		"Latest Build": "DR9401657",
-		"Feature Build": "DR9401657"
+		"Latest Build": "DR9401688",
+		"Feature Build": "DR9401688"
 	},
 	"Fresco": {
 		"MR1.1": {

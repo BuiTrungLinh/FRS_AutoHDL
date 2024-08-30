@@ -26,12 +26,12 @@ def execute_teardown():
     # erase customdata
     GVar.gSERVICE_PORT.send_command(SpCMD.sp_write_cfg + SpCMD.cfg_erase_customdata)
     # erase overide file
-    GVar.gSERVICE_PORT.send_command(SpCMD.sp_erase_custom_file)
+    # GVar.gSERVICE_PORT.send_command(SpCMD.sp_erase_custom_file)
     # Erase config name
     GVar.gSERVICE_PORT.send_command(SpCMD.sp_write_cfg + SpCMD.cfg_config_file_id + SpCMD.val_config_file_id)
     # Todo
     # erase .wav file
-    serviceport.erase_sound_file()
+    # serviceport.erase_sound_file()
     # save and reset
     GVar.gSERVICE_PORT.send_command(SpCMD.sp_save)
     GVar.gSERVICE_PORT.send_command(SpCMD.sp_reset)
@@ -70,11 +70,11 @@ def execute_before_hdl(interface_name):
     # erase customdata
     GVar.gSERVICE_PORT.send_command(SpCMD.sp_write_cfg + SpCMD.cfg_erase_customdata)
     # erase overide file
-    GVar.gSERVICE_PORT.send_command(SpCMD.sp_erase_custom_file)
+    # GVar.gSERVICE_PORT.send_command(SpCMD.sp_erase_custom_file)
     # update config name
     GVar.gSERVICE_PORT.send_command(SpCMD.sp_write_cfg + SpCMD.cfg_config_file_id + SpCMD.val_config_file_id)
     # erase .wav file
-    serviceport.erase_sound_file()
+    # serviceport.erase_sound_file()
     # save and reset
     GVar.gSERVICE_PORT.send_command(SpCMD.sp_save)
     GVar.gSERVICE_PORT.send_command(SpCMD.sp_reset)
