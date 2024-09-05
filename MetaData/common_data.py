@@ -160,7 +160,7 @@ class PathFiles:
 
 class SPCommand:
     # SP COMMAND =======
-    sp_aaa = '011B'
+    sp_grb = '011B'
     sp_get_identification = "011C"
     sp_save = "0012"
     sp_reset = "001A"
@@ -168,7 +168,6 @@ class SPCommand:
     sp_good_beep = "001C"
     sp_get_statistics_enhanced_number = "013100"
     sp_get_statistics_enhanced_index = "013101"
-    sp_get_event_log_entry_enhanced_translated = "022C"
     sp_get_hwid = "024008"
     sp_erase_custom_file = "1520"
     sp_write_cfg = "0010"

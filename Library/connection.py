@@ -287,7 +287,16 @@ class Connection(object):
         self.readerThread.respond_data = b''
         self.protocol.write_line(command, '81')
         time.sleep(2)
-        return process_return_extended_data(self.readerThread.respond_data)
+        data = process_return_extended_data(self.readerThread.respond_data)
+        i = 1
+        while i < 3:
+            if data != b'\x15\x16':
+                break
+            self.protocol.write_line(command, '81')
+            data = process_return_extended_data(self.readerThread.respond_data)
+            time.sleep(2)
+            i += 1
+        return data
 
     def open_port(self):
         self.ser = serial.serial_for_url(url=self.port, baudrate=self.baudrate, parity=self.parity, timeout=1)

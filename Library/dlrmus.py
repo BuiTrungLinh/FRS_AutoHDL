@@ -61,10 +61,13 @@ class Dlrmus:
                            + set_baudrate
                            + comdata.Dlrmus.p_select_path_file + ' '
                            + self.to_build)
-        sett.print_message_to_console(cmd_dlrmus_host)
-        subprocess.run(cmd_dlrmus_host)
+        sett.print_message_to_console('Build is loading, waiting ......')
+        dlrmus_return = subprocess.run(cmd_dlrmus_host, text=True, capture_output=True)
+        time.sleep(5)
+        sett.print_message_to_console(dlrmus_return.args)
+        sett.print_message_to_console(dlrmus_return.stdout)
         # copy log file
-        # save_log_file('log_name', 'HOST')
+        save_log_file(dlrmus_return.stdout, 'HOST')
 
     def update_by_sp(self):
         cmd_dlrmus_sp = (self.path_file_dlrmus + ' '
@@ -75,11 +78,12 @@ class Dlrmus:
         # close sp because dlrmus is using it
         self.sp.close_port()
         sett.print_message_to_console('SP: Load build "{}" to scanner.'.format(self.from_build))
-        sett.print_message_to_console(cmd_dlrmus_sp)
-        subprocess.run(cmd_dlrmus_sp)
+        sett.print_message_to_console('Build is loading, waiting ......')
+        dlrmus_return = subprocess.run(cmd_dlrmus_sp, text=True, capture_output=True)
         time.sleep(5)
-        # copy log file
-        # save_log_file('log_name', 'SP')
+        sett.print_message_to_console(dlrmus_return.args)
+        sett.print_message_to_console(dlrmus_return.stdout)
+        save_log_file(dlrmus_return.stdout, 'SP')
         self.sp.open_port()
         # check build is load done
         obser_build = serviceport.GetScannerIHS(self.sp).dict_data[comdata.Identification.l_Application_ROM_ID]
@@ -89,11 +93,18 @@ class Dlrmus:
         return [True, comdata.Message.Succ_Dlrmus_Update_SP.format(exp_build)]
 
 
-def save_log_file(log_name, method):
-    dt_string = datetime.now().strftime("%d%m%Y_%H%M%S")
-    newpath = (PathFiles.path_log_folder + BuiltIn().get_variable_value("${TEST NAME}") + '_'
-               + dt_string + r'\\' + method + '_' + log_name)
-    if not os.path.exists(newpath):
-        os.makedirs(newpath)
+def save_log_file(output, method):
+    if output.find('traffic log:') < 1:
+        sett.print_message_to_console('Cannot find any log file!!!')
+        return
+    path_log_name = output[output.find('traffic log:') + 13:].strip()
+    d_string = datetime.now().strftime("%d%m%Y")
+    t_string = datetime.now().strftime("%H%M%S")
+    newpathtcs = (PathFiles.path_log_folder + BuiltIn().get_variable_value("${TEST NAME}") + '_' + d_string)
+    if not os.path.exists(newpathtcs):
+        os.makedirs(newpathtcs)
+    newpathlog = newpathtcs + r'\\' + method + '_' + d_string + '_' + t_string
+    if not os.path.exists(newpathlog):
+        os.makedirs(newpathlog)
     # copy files to folder log
-    shutil.copy(PathFiles.path_dlrmus_log_folder + log_name, newpath)
+    shutil.copy(path_log_name, newpathlog)

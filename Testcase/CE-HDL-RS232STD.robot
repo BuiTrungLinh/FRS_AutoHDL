@@ -13,7 +13,7 @@ Test Setup       Setup      ${PID_CE}
 CE-AT_HDL-RS232STD-AppOnly-Upgrade-DR9401672_To_DR9401688
     [Documentation]    Running HDL RS232STD
 #    load scanner to "build_from" by ServicePort
-#    Load Build To Scanner By SP    DR9401672
+    Load Build To Scanner By SP    DR9401672
 #    prepare something before running HDL
     Setup Before HostDownload   ${INTERFACE_RS232STD}
 #    execute HDL

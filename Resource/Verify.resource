@@ -67,10 +67,10 @@ Verify Event Log
     ${len_obser} =  Get Length    ${DICT_OBSER_LOG}
     ${len_expected} =   Get Length    ${LIST_EXPECTED_LOG}
     Run Keyword And Continue On Failure    Should Be Equal As Numbers    ${len_obser}   ${len_expected}     msg=The current number of events in the scanner is incorrect.
-    Log    Observation:
-    Log Dictionary    &{DICT_OBSER_LOG}
-    Log    Expected:
-    Log List    @{LIST_EXPECTED_LOG}
+#    Log    Observation:
+#    Log Dictionary    &{DICT_OBSER_LOG}
+#    Log    Expected:
+#    Log List    @{LIST_EXPECTED_LOG}
     Log    ======= END - Verify Event Log =======
 
 Verify Config Tag

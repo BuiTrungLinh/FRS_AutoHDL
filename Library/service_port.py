@@ -84,67 +84,70 @@ class GetScannerIHS:
         healthStr = ''
         statisticsStr = ''
         tmp_combine = idenStr + healthStr + statisticsStr
-        infor_list = tmp_combine[10:-9].split('\\x03\\x02')
+        infor_list = tmp_combine[tmp_combine.find('\\x02A')+4:tmp_combine.rfind('\\x03\\x04')].split('\\x03\\x02')
         self.dict_data = {}
-        for data in infor_list:
-            match data[0]:
-                case comdata.Identification.Application_ROM_ID:
-                    self.Application_ROM_ID = data[1:]
-                    self.dict_data['Application_ROM_ID'] = data[1:]
-                case comdata.Identification.Revision_ECLevel:
-                    self.Revision_ECLevel = data[1:]
-                    self.dict_data['Revision_ECLevel'] = data[1:]
-                case comdata.Identification.Configuration_ID:
-                    self.Configuration_ID = data[1:]
-                    self.dict_data['Configuration_ID'] = data[1:]
-                case comdata.Identification.Internal_Scale:
-                    self.Internal_Scale = data[1:]
-                    self.dict_data['Internal_Scale'] = data[1:]
-                case comdata.Identification.Remote_Display_Version:
-                    self.Remote_Display_Version = data[1:]
-                    self.dict_data['Remote_Display_Version'] = data[1:]
-                case comdata.Identification.Serial_Number:
-                    self.Serial_Number = data[1:]
-                    self.dict_data['Serial_Number'] = data[1:]
-                case comdata.Identification.Model_Number:
-                    self.Model_Number = data[1:]
-                    self.dict_data['Model_Number'] = data[1:]
-                case comdata.Identification.Main_Board_Serial_Number:
-                    self.Main_Board_Serial_Number = data[1:]
-                    self.dict_data['Main_Board_Serial_Number'] = data[1:]
-                case comdata.Identification.Scanner_Interface_Number:
-                    self.Scanner_Interface_Number = data[1:]
-                    self.dict_data['Scanner_Interface_Number'] = data[1:]
-                case comdata.Identification.VL_Version:
-                    self.VL_Version = data[1:]
-                    self.dict_data['VL_Version'] = data[1:]
-                case comdata.Identification.Bootloader_ROM_ID:
-                    self.Bootloader_ROM_ID = data[1:]
-                    self.dict_data['Bootloader_ROM_ID'] = data[1:]
-                case comdata.Identification.FPGA_Version_ID:
-                    self.FPGA_Version_ID = data[1:]
-                    self.dict_data['FPGA_Version_ID'] = data[1:]
-                case comdata.Identification.IPE_Application_ROM_ID:
-                    self.IPE_Application_ROM_ID = data[1:]
-                    self.dict_data['IPE_Application_ROM_ID'] = data[1:]
-                case comdata.Identification.USB_Loader_Version_ID:
-                    self.USB_Loader_Version_ID = data[1:]
-                    self.dict_data['USB_Loader_Version_ID'] = data[1:]
-                case comdata.Identification.SDRAM_Configuration_File_ID:
-                    self.SDRAM_Configuration_File_ID = data[1:]
-                    self.dict_data['SDRAM_Configuration_File_ID'] = data[1:]
-                case comdata.Identification.EAS_Version:
-                    self.EAS_Version = data[1:]
-                    self.dict_data['EAS_Version'] = data[1:]
-                case comdata.Identification.Interface_Application_ROM_ID:
-                    self.Interface_Application_ROM_ID = data[1:]
-                    self.dict_data['Interface_Application_ROM_ID'] = data[1:]
-                case comdata.Identification.Interface_Bootloader_ROM_ID:
-                    self.Interface_Bootloader_ROM_ID = data[1:]
-                    self.dict_data['Interface_Bootloader_ROM_ID'] = data[1:]
-                case comdata.Identification.Formatter_Version:
-                    self.Formatter_Version = data[1:]
-                    self.dict_data['Formatter_Version'] = data[1:]
+        try:
+            for data in infor_list:
+                match data[0]:
+                    case comdata.Identification.Application_ROM_ID:
+                        self.Application_ROM_ID = data[1:]
+                        self.dict_data['Application_ROM_ID'] = data[1:]
+                    case comdata.Identification.Revision_ECLevel:
+                        self.Revision_ECLevel = data[1:]
+                        self.dict_data['Revision_ECLevel'] = data[1:]
+                    case comdata.Identification.Configuration_ID:
+                        self.Configuration_ID = data[1:]
+                        self.dict_data['Configuration_ID'] = data[1:]
+                    case comdata.Identification.Internal_Scale:
+                        self.Internal_Scale = data[1:]
+                        self.dict_data['Internal_Scale'] = data[1:]
+                    case comdata.Identification.Remote_Display_Version:
+                        self.Remote_Display_Version = data[1:]
+                        self.dict_data['Remote_Display_Version'] = data[1:]
+                    case comdata.Identification.Serial_Number:
+                        self.Serial_Number = data[1:]
+                        self.dict_data['Serial_Number'] = data[1:]
+                    case comdata.Identification.Model_Number:
+                        self.Model_Number = data[1:]
+                        self.dict_data['Model_Number'] = data[1:]
+                    case comdata.Identification.Main_Board_Serial_Number:
+                        self.Main_Board_Serial_Number = data[1:]
+                        self.dict_data['Main_Board_Serial_Number'] = data[1:]
+                    case comdata.Identification.Scanner_Interface_Number:
+                        self.Scanner_Interface_Number = data[1:]
+                        self.dict_data['Scanner_Interface_Number'] = data[1:]
+                    case comdata.Identification.VL_Version:
+                        self.VL_Version = data[1:]
+                        self.dict_data['VL_Version'] = data[1:]
+                    case comdata.Identification.Bootloader_ROM_ID:
+                        self.Bootloader_ROM_ID = data[1:]
+                        self.dict_data['Bootloader_ROM_ID'] = data[1:]
+                    case comdata.Identification.FPGA_Version_ID:
+                        self.FPGA_Version_ID = data[1:]
+                        self.dict_data['FPGA_Version_ID'] = data[1:]
+                    case comdata.Identification.IPE_Application_ROM_ID:
+                        self.IPE_Application_ROM_ID = data[1:]
+                        self.dict_data['IPE_Application_ROM_ID'] = data[1:]
+                    case comdata.Identification.USB_Loader_Version_ID:
+                        self.USB_Loader_Version_ID = data[1:]
+                        self.dict_data['USB_Loader_Version_ID'] = data[1:]
+                    case comdata.Identification.SDRAM_Configuration_File_ID:
+                        self.SDRAM_Configuration_File_ID = data[1:]
+                        self.dict_data['SDRAM_Configuration_File_ID'] = data[1:]
+                    case comdata.Identification.EAS_Version:
+                        self.EAS_Version = data[1:]
+                        self.dict_data['EAS_Version'] = data[1:]
+                    case comdata.Identification.Interface_Application_ROM_ID:
+                        self.Interface_Application_ROM_ID = data[1:]
+                        self.dict_data['Interface_Application_ROM_ID'] = data[1:]
+                    case comdata.Identification.Interface_Bootloader_ROM_ID:
+                        self.Interface_Bootloader_ROM_ID = data[1:]
+                        self.dict_data['Interface_Bootloader_ROM_ID'] = data[1:]
+                    case comdata.Identification.Formatter_Version:
+                        self.Formatter_Version = data[1:]
+                        self.dict_data['Formatter_Version'] = data[1:]
+        except:
+            self.dict_data = {}
         self.dict_data['MCF_Version'] = sp.send_command(comdata.SPCommand.sp_read_cfg
                                                         + comdata.SPCommand.cfg_mcf_version).decode("utf-8")
         self.dict_data['Current_HW_ID'] = sp.send_command(comdata.SPCommand.sp_get_hwid).hex()
@@ -153,7 +156,8 @@ class GetScannerIHS:
 def get_enhanced_statistics():
     # 0x01<index:2> - read the statistics information for statistics specified by index returning:
     # <index:2><id:2><value:4><null terminated string descriptor if available>
-    total_number = int.from_bytes(gvar.gSERVICE_PORT.send_command(comdata.SPCommand.sp_get_statistics_enhanced_number), "big")
+    total_number = int.from_bytes(gvar.gSERVICE_PORT.send_command(comdata.SPCommand.sp_get_statistics_enhanced_number),
+                                  "big")
     dict_stat = {}
     for index in range(total_number - 1):
         str_index = str(hex(index).split('x')[-1])
@@ -195,7 +199,7 @@ def erase_sound_file():
             sub_sub_tmp = sub_tmp[sub_tmp.rfind('/'):].strip()
             wav_file = sub_sub_tmp[1:].strip()
             # clear all wav file with upper and lower
-            gvar.gSERVICE_PORT.send_command(comdata.SPCommand.sp_erase_find_internal+'"' + wav_file.upper() + '"')
+            gvar.gSERVICE_PORT.send_command(comdata.SPCommand.sp_erase_find_internal + '"' + wav_file.upper() + '"')
             gvar.gSERVICE_PORT.send_command(comdata.SPCommand.sp_erase_find_internal + '"' + wav_file.lower() + '"')
             start_index = j + 4
     # recheck make sure wav file is deleted
