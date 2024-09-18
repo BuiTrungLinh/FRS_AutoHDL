@@ -26,6 +26,8 @@ def format_sp_command(cmd, data_type):
             sumint += an_integer
 
         check_digit = 256 - (sumint % 256)
+        if hex(check_digit)[-2:] == '00': check_digit = 00
+
         decimal_array.append(check_digit)
 
         for d in decimal_array:
@@ -85,7 +87,7 @@ class GetScannerIHS:
         healthStr = ''
         statisticsStr = ''
         tmp_combine = idenStr + healthStr + statisticsStr
-        infor_list = tmp_combine[tmp_combine.find('\\x02A')+4:tmp_combine.rfind('\\x03\\x04')].split('\\x03\\x02')
+        infor_list = tmp_combine[tmp_combine.find('\\x02A') + 4:tmp_combine.rfind('\\x03\\x04')].split('\\x03\\x02')
         self.dict_data = {}
         try:
             for data in infor_list:
