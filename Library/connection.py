@@ -140,7 +140,7 @@ class LineReader(Packetizer):
         is applied before sending and also the newline is append.
         """
         # + is not the best choice but bytes does not support % or .format in py3 and we want a single write call
-        self.transport.write(Service_Port.format_sp_command(text, datatype).encode())
+        self.transport.write(Service_Port.format_sp_command(text, datatype))
 
 
 class ReaderThread(threading.Thread):
@@ -204,9 +204,8 @@ class ReaderThread(threading.Thread):
                     # make a separated try-except for called user code
                     try:
                         self.protocol.data_received(data)
-                        # print(data)
-                        # print(self.protocol.data_received(data))
                         self.respond_data = self.respond_data + data
+                        # print(self.respond_data)
                     except Exception as e:
                         error = e
                         break
@@ -287,15 +286,15 @@ class Connection(object):
         self.readerThread.respond_data = b''
         self.protocol.write_line(command, '81')
         time.sleep(2)
-        data = process_return_extended_data(self.readerThread.respond_data)
-        i = 1
-        while i < 3:
-            if data != b'\x15\x16':
-                break
-            self.protocol.write_line(command, '81')
-            data = process_return_extended_data(self.readerThread.respond_data)
-            time.sleep(2)
-            i += 1
+        data = process_return_extended_data(self.readerThread.respond_data).hex()
+        # i = 1
+        # while i < 3:
+        #     if data != b'\x15\x16':
+        #         break
+        #     self.protocol.write_line(command, '81')
+        #     data = process_return_extended_data(self.readerThread.respond_data)
+        #     time.sleep(2)
+        #     i += 1
         return data
 
     def open_port(self):
@@ -369,6 +368,6 @@ def connect_port():
 
 def process_return_extended_data(data):
     # \x82 = 130
-    if data[1] == 130:
-        return data[6:-1]
+    if data[0] == 130:
+        return data[5:-1]
     return data

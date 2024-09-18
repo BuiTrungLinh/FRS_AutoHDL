@@ -5,7 +5,7 @@ import time
 
 def format_sp_command(cmd, data_type):
     print('Set command: ' + cmd)
-    output_str = ""
+    output_str = b''
     if (len(cmd) % 2) == 0:
         command_len = int(len(cmd) / 2)
 
@@ -29,7 +29,8 @@ def format_sp_command(cmd, data_type):
         decimal_array.append(check_digit)
 
         for d in decimal_array:
-            output_str += chr(d)
+            # output_str += chr(d)
+            output_str += d.to_bytes(1, 'big')
 
         return output_str
     else:
