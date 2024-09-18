@@ -154,7 +154,7 @@ class PathFiles:
     path_sw_infor = os.path.join(ROOT_DIR, r'software_information.json')
     path_cfgule_file = os.path.join(ROOT_DIR, r'../Files/ProductConfig/CFGULE.tex')
     path_ule_file = os.path.join(ROOT_DIR, r'../Files/ProductConfig/ULE.ule')
-    path_log_folder = os.path.join(ROOT_DIR, r'../log/')
+    path_log_folder = os.path.join(ROOT_DIR, r'../Log/')
     path_dlrmus_log_folder = os.path.join(ROOT_DIR, r'../Tools/DLRMUs/logs/')
 
 
