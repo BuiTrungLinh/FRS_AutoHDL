@@ -151,8 +151,8 @@ class GetScannerIHS:
                         self.dict_data['Formatter_Version'] = data[1:]
         except:
             self.dict_data = {}
-        self.dict_data['MCF_Version'] = sp.send_command(comdata.SPCommand.sp_read_cfg + comdata.SPCommand.cfg_mcf_version)
-        self.dict_data['Current_HW_ID'] = sp.send_command(comdata.SPCommand.sp_get_hwid)
+        self.dict_data['MCF_Version'] = sp.send_command(comdata.SPCommand.sp_read_cfg + comdata.SPCommand.cfg_mcf_version).decode()
+        self.dict_data['Current_HW_ID'] = sp.send_command(comdata.SPCommand.sp_get_hwid).hex()
 
 
 def get_enhanced_statistics():

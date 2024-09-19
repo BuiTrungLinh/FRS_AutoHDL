@@ -133,7 +133,7 @@ def get_obser_config():
         tmp_dict = {}
         gvar.gSERVICE_PORT.send_command(SPCommand.sp_write_cfg + SPCommand.cfg_interface + ifs)
         for cfg in exp_cfg[ifs]:
-            value = gvar.gSERVICE_PORT.send_command(SPCommand.sp_read_cfg + cfg)
+            value = gvar.gSERVICE_PORT.send_command(SPCommand.sp_read_cfg + cfg).hex()
             tmp_dict[cfg] = value
         dict_obser[ifs] = tmp_dict
     return dict_obser

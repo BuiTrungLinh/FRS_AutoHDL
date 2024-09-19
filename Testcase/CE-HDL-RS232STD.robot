@@ -10,13 +10,24 @@ Test Setup       Setup      ${PID_CE}
 
 
 *** Test Cases ***
-CE-AT_HDL-RS232STD-AppOnly-Upgrade-DR9401672_To_DR9401688
+CE-AT_HDL-RS232STD-AppOnly-Upgrade-DR9401688_To_DR9401688
     [Documentation]    Running HDL RS232STD
-#    load scanner to "build_from" by ServicePort
-    Load Build To Scanner By SP    DR9401672
-#    prepare something before running HDL
+##    load scanner to "build_from" by ServicePort
+    Load Build To Scanner By SP    DR9401688
+##    prepare something before running HDL
     Setup Before HostDownload   ${INTERFACE_RS232STD}
-#    execute HDL
-    Load Build To Scanner By Host   ${INTERFACE_RS232STD}    ${FILETYPE_APPONLY}     DR9401688
+##    execute HDL
+    Load Build To Scanner By Host   ${INTERFACE_RS232STD}    ${FILETYPE_CFGONLY}     DR9401688
 #    verify HDL
-    Verify HDL    ${FILETYPE_APPONLY}     DR9401688
+    Verify HDL    ${FILETYPE_CFGONLY}     DR9401688
+
+#CE-AT_HDL-RS232STD-AppOnly-Upgrade-DR9401688_To_DR9401672
+#    [Documentation]    Running HDL RS232STD
+##    load scanner to "build_from" by ServicePort
+#    Load Build To Scanner By SP    DR9401688
+##    prepare something before running HDL
+#    Setup Before HostDownload   ${INTERFACE_RS232STD}
+##    execute HDL
+#    Load Build To Scanner By Host   ${INTERFACE_RS232STD}    ${FILETYPE_APPONLY}     DR9401672
+##    verify HDL
+#    Verify HDL    ${FILETYPE_APPONLY}     DR9401672

@@ -286,7 +286,7 @@ class Connection(object):
         self.readerThread.respond_data = b''
         self.protocol.write_line(command, '81')
         time.sleep(2)
-        data = process_return_extended_data(self.readerThread.respond_data).hex()
+        data = process_return_extended_data(self.readerThread.respond_data)
         # i = 1
         # while i < 3:
         #     if data != b'\x15\x16':
